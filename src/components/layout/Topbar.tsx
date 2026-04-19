@@ -16,6 +16,7 @@ import {
   Menu,
   Palette,
 } from 'lucide-react';
+import { NotificationDropdown } from './NotificationDropdown';
 
 interface TopbarProps {
   onMenuClick?: () => void;
@@ -93,18 +94,7 @@ export function Topbar({ onMenuClick }: TopbarProps) {
         </button>
 
         {/* Notification bell */}
-        <button
-          id="notification-bell"
-          className="relative rounded-lg p-2 text-muted-foreground transition-all hover:bg-muted hover:text-foreground"
-          aria-label="Notifications"
-        >
-          <Bell className="h-5 w-5" />
-          {notificationCount > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground ring-2 ring-background">
-              {notificationCount > 9 ? '9+' : notificationCount}
-            </span>
-          )}
-        </button>
+        <NotificationDropdown />
 
         {/* Theme toggle & selector */}
         <div className="relative">

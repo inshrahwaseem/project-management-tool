@@ -28,6 +28,8 @@ import { useTaskStore } from '@/stores/taskStore';
 import { KANBAN_COLUMNS } from '@/lib/constants';
 import { KanbanColumn } from '@/components/tasks/KanbanColumn';
 import { TaskCard } from '@/components/tasks/TaskCard';
+import { BoardFilterBar } from '@/components/tasks/BoardFilterBar';
+import { useSession } from 'next-auth/react';
 import type { TaskWithRelations, TaskStatus } from '@/types';
 
 export default function BoardPage() {
@@ -45,6 +47,12 @@ export default function BoardPage() {
 
   const [activeTask, setActiveTask] = useState<TaskWithRelations | null>(null);
   const [projectTitle, setProjectTitle] = useState('');
+  
+  // Filter states
+  const { data: session } = useSession();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [priorityFilter, setPriorityFilter] = useState('ALL');
+  const [assigneeFilter, setAssigneeFilter] = useState('ALL');
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -74,12 +82,45 @@ export default function BoardPage() {
 
   useEffect(() => {
     fetchTasks();
-  }, [fetchTasks]);
+    const intervalId = setInterval(() => {
+      // Background polling for real-time updates
+      fetch('/api/v1/projects/' + projectId + '/tasks?limit=100')
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            setTasks(data.data);
+          }
+        })
+        .catch(() => {});
+    }, 5000); // 5-second polling
+
+    return () => clearInterval(intervalId);
+  }, [fetchTasks, projectId, setTasks]);
+
+  // Apply filters
+  const filteredTasks = tasks.filter((task) => {
+    // 1. Search Query
+    if (searchQuery && !task.title.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false;
+    }
+    // 2. Priority
+    if (priorityFilter !== 'ALL' && task.priority !== priorityFilter) {
+      return false;
+    }
+    // 3. Assignees
+    if (assigneeFilter === 'UNASSIGNED' && task.assigneeId !== null) {
+      return false;
+    }
+    if (assigneeFilter === 'ME' && session?.user && task.assigneeId !== (session.user as any).id) {
+      return false;
+    }
+    return true;
+  });
 
   // Group tasks by status
   const columns = KANBAN_COLUMNS.map((col) => ({
     ...col,
-    tasks: tasks
+    tasks: filteredTasks
       .filter((t) => t.status === col.id)
       .sort((a, b) => a.position - b.position),
   }));
@@ -193,10 +234,19 @@ export default function BoardPage() {
 
   return (
     <div className="space-y-4">
-      {/* Board Header Actions */}
-      <div className="flex items-center justify-between">
+      {/* Board Header Actions & Filters */}
+      <BoardFilterBar
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        priorityFilter={priorityFilter}
+        setPriorityFilter={setPriorityFilter}
+        assigneeFilter={assigneeFilter}
+        setAssigneeFilter={setAssigneeFilter}
+      />
+      
+      <div className="flex items-center justify-between mb-2">
         <p className="text-sm text-[hsl(var(--muted-foreground))]">
-          {tasks.length} task{tasks.length !== 1 ? 's' : ''} across {columns.length} columns
+          {filteredTasks.length} task{filteredTasks.length !== 1 ? 's' : ''} across {columns.length} columns
         </p>
       </div>
 

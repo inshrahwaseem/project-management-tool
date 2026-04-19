@@ -199,13 +199,18 @@ export function TaskDetail() {
                       <select
                         value={task.priority}
                         onChange={(e) => handleUpdate('priority', e.target.value)}
-                        className="w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2 text-sm outline-none"
+                        className="w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/20"
                         style={{
                           color: TASK_PRIORITY_COLORS[task.priority],
+                          fontWeight: '600',
                         }}
                       >
                         {Object.entries(TASK_PRIORITY_LABELS).map(([key, label]) => (
-                          <option key={key} value={key}>
+                          <option 
+                            key={key} 
+                            value={key}
+                            style={{ color: TASK_PRIORITY_COLORS[key as keyof typeof TASK_PRIORITY_COLORS], fontWeight: 'normal' }}
+                          >
                             {label}
                           </option>
                         ))}

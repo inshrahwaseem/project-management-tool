@@ -58,8 +58,11 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       data: project,
       message: 'Project updated successfully',
     });
-  } catch (error) {
+  } catch (error: any) {
     logger.error('PUT /api/v1/projects/:id failed', error);
+    if (error.message && error.message.includes('FORBIDDEN')) {
+      return apiErrors.forbidden(error.message);
+    }
     return apiErrors.internal();
   }
 }
@@ -73,8 +76,11 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     await ProjectService.deleteProject(id, user.id);
 
     return successResponse({ message: 'Project deleted successfully' });
-  } catch (error) {
+  } catch (error: any) {
     logger.error('DELETE /api/v1/projects/:id failed', error);
+    if (error.message && error.message.includes('FORBIDDEN')) {
+      return apiErrors.forbidden(error.message);
+    }
     return apiErrors.internal();
   }
 }

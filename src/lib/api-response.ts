@@ -60,8 +60,8 @@ export const apiErrors = {
   unauthorized: () =>
     errorResponse({ message: 'Unauthorized', status: 401 }),
 
-  forbidden: () =>
-    errorResponse({ message: 'Forbidden', status: 403 }),
+  forbidden: (message = 'Forbidden') =>
+    errorResponse({ message, status: 403 }),
 
   notFound: (resource = 'Resource') =>
     errorResponse({ message: `${resource} not found`, status: 404 }),

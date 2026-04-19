@@ -27,10 +27,21 @@ export async function GET() {
   }
 }
 
-export async function PATCH() {
+export async function PATCH(request: NextRequest) {
   try {
     const user = await getCurrentUser();
     if (!user) return apiErrors.unauthorized();
+
+    const body = await request.json();
+    const { id } = body;
+
+    if (id) {
+      await prisma.notification.update({
+        where: { id, userId: user.id },
+        data: { read: true },
+      });
+      return successResponse({ message: 'Notification marked as read' });
+    }
 
     await prisma.notification.updateMany({
       where: { userId: user.id, read: false },

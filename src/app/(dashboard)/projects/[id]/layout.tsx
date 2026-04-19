@@ -8,13 +8,16 @@ import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
 import { ProjectChat } from '@/components/chat/ProjectChat';
+import { useSession } from 'next-auth/react';
+import type { MemberRole } from '@prisma/client';
 
 export default function ProjectLayout({ children }: { children: React.ReactNode }) {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const params = useParams();
   const projectId = params.id as string;
   const [projectTitle, setProjectTitle] = useState('Loading...');
-
+  const [userRole, setUserRole] = useState<MemberRole | null>(null);
   useEffect(() => {
     async function fetchProject() {
       try {
@@ -22,21 +25,32 @@ export default function ProjectLayout({ children }: { children: React.ReactNode 
         const data = await res.json();
         if (data.success) {
           setProjectTitle(data.data.title);
+          
+          // Find current user's role in this project
+          if (session?.user) {
+            const member = data.data.members.find((m: any) => m.userId === (session.user as any).id);
+            if (member) setUserRole(member.role);
+          }
         }
       } catch (error) {
         setProjectTitle('Project');
       }
     }
-    if (projectId) fetchProject();
-  }, [projectId]);
+    if (projectId && session) fetchProject();
+  }, [projectId, session]);
 
-  const tabs = [
+  const allTabs = [
     { name: 'Board', path: `/projects/${projectId}/board`, icon: LayoutDashboard },
     { name: 'List', path: `/projects/${projectId}/list`, icon: ListTodo },
     { name: 'Timeline', path: `/projects/${projectId}/timeline`, icon: CalendarDays },
-    { name: 'Automations', path: `/projects/${projectId}/automations`, icon: Settings },
-    { name: 'Settings', path: `/projects/${projectId}/settings`, icon: Settings },
+    { name: 'Automations', path: `/projects/${projectId}/automations`, icon: Settings, adminOnly: true },
+    { name: 'Settings', path: `/projects/${projectId}/settings`, icon: Settings, adminOnly: true },
   ];
+
+  const filteredTabs = allTabs.filter(tab => {
+    if (!tab.adminOnly) return true;
+    return userRole === 'OWNER' || userRole === 'ADMIN';
+  });
 
   return (
     <div className="flex h-full flex-col space-y-4 relative">
@@ -44,7 +58,7 @@ export default function ProjectLayout({ children }: { children: React.ReactNode 
         <h1 className="text-2xl font-bold text-foreground">{projectTitle}</h1>
         
         <div className="flex space-x-1">
-          {tabs.map((tab) => {
+          {filteredTabs.map((tab) => {
             const isActive = pathname === tab.path;
             return (
               <Link

@@ -201,6 +201,15 @@ export class ProjectService {
 
     if (!existing) return null;
 
+    // RBAC: Only OWNER or ADMIN can update project settings
+    const membership = await prisma.projectMember.findUnique({
+      where: { projectId_userId: { projectId: id, userId } },
+    });
+
+    if (!membership || (membership.role !== 'OWNER' && membership.role !== 'ADMIN')) {
+      throw new Error('FORBIDDEN: Insufficient permissions to update this project.');
+    }
+
     const updated = await prisma.$transaction(async (tx) => {
       const result = await tx.project.update({
         where: { id },
@@ -242,6 +251,15 @@ export class ProjectService {
    * Soft delete a project.
    */
   static async deleteProject(id: string, userId: string) {
+    // RBAC: Only OWNER or ADMIN can delete project
+    const membership = await prisma.projectMember.findUnique({
+      where: { projectId_userId: { projectId: id, userId } },
+    });
+
+    if (!membership || (membership.role !== 'OWNER' && membership.role !== 'ADMIN')) {
+      throw new Error('FORBIDDEN: Insufficient permissions to delete this project.');
+    }
+
     const deleted = await prisma.project.update({
       where: { id },
       data: { deletedAt: new Date() },
