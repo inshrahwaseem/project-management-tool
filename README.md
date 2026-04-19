@@ -10,7 +10,7 @@
 <p align="center">
   A highly scalable, modern, and intuitive Project Management application built to mirror the core functionalities of Jira & Asana. 
   <br />
-  <strong><a href="https://project-management-tool-zt8zqfj6k-inshrahwaseems-projects.vercel.app">🔴 Live Demo (Vercel)</a></strong>
+  <strong><a href="https://proflow-project-ui.vercel.app">🔴 Live Demo (Vercel)</a></strong>
 </p>
 
 ## ✨ Features
