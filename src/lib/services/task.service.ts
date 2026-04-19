@@ -5,6 +5,7 @@
 
 import prisma from '@/lib/prisma';
 import logger from '@/lib/logger';
+import { IntegrationService } from '@/lib/services/integration.service';
 import type { CreateTaskInput, UpdateTaskInput, TaskFilterInput, ReorderTasksInput } from '@/lib/validators/task.schema';
 
 export class TaskService {
@@ -234,6 +235,7 @@ export class TaskService {
     if (data.assigneeId !== undefined) updateData.assigneeId = data.assigneeId;
     if (data.estimatedHours !== undefined) updateData.estimatedHours = data.estimatedHours;
     if (data.dueDate !== undefined) updateData.dueDate = data.dueDate ? new Date(data.dueDate) : null;
+    if ((data as any).customFields !== undefined) updateData.customFields = (data as any).customFields;
 
     const updated = await prisma.$transaction(async (tx) => {
       const result = await tx.task.update({
@@ -273,6 +275,18 @@ export class TaskService {
             link: `/projects/${result.projectId}/board`,
           },
         });
+
+        // Trigger Slack Notification on Completion
+        if (data.status === 'DONE') {
+          const slackUrl = process.env.SLACK_WEBHOOK_URL; 
+          if (slackUrl) {
+            await IntegrationService.notifySlack(slackUrl, {
+              title: `✅ Task Completed: ${result.title}`,
+              text: `Finished by ${result.assignee?.name || 'someone'}. Great job team!`,
+              color: '#10b981'
+            });
+          }
+        }
       }
 
       // Notify on status change & trigger Workflow Automation

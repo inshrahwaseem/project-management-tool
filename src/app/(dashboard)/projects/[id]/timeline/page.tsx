@@ -132,17 +132,27 @@ export default function TimelinePage() {
                   {/* Gantt Bar Area */}
                   <div className="relative flex-1 min-h-[44px] py-1">
                     <div 
-                      className="absolute top-1.5 bottom-1.5 rounded-md shadow-sm border border-black/10 flex items-center px-2 cursor-pointer transition-transform hover:scale-[1.01] overflow-hidden"
+                      className="absolute top-1.5 bottom-1.5 rounded-md shadow-md border border-black/10 flex flex-col justify-center px-3 cursor-pointer transition-all hover:scale-[1.02] hover:z-20 overflow-hidden"
                       style={{ 
                         ...getTaskStyle(task),
                         backgroundColor: TASK_PRIORITY_COLORS[task.priority] || 'hsl(var(--primary))' 
                       }}
                       onClick={() => openDetail(task)}
-                      title={`${task.title} (${task.status})`}
                     >
-                      <span className="text-[10px] font-bold text-white truncate drop-shadow-md">
-                        {task.title}
-                      </span>
+                      {/* Progress Fill Overlay */}
+                      <div 
+                        className="absolute inset-0 bg-black/20 pointer-events-none"
+                        style={{ width: `${task.status === 'DONE' ? 100 : task.status === 'IN_REVIEW' ? 75 : task.status === 'IN_PROGRESS' ? 40 : 0}%` }}
+                      />
+                      
+                      <div className="relative z-10 flex flex-col min-w-0">
+                        <span className="text-[11px] font-bold text-white truncate drop-shadow-md">
+                          {task.title}
+                        </span>
+                        <span className="text-[8px] font-medium text-white/80 uppercase">
+                          {task.status.replace('_', ' ')}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>

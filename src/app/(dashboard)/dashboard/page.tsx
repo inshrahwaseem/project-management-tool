@@ -82,6 +82,7 @@ export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [activities, setActivities] = useState<ActivityEntry[]>([]);
   const [myTasks, setMyTasks] = useState<MyTask[]>([]);
+  const [bottleneck, setBottleneck] = useState<{ message: string; type: string } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -101,7 +102,21 @@ export default function DashboardPage() {
 
         if (statsData.success) setStats(statsData.data);
         if (activityData.success) setActivities(activityData.data);
-        if (tasksData.success) setMyTasks(tasksData.data);
+        if (tasksData.success) {
+          setMyTasks(tasksData.data);
+          // AI Bottleneck logic (Heuristic: more than 2 high priority due today)
+          if (statsData.data.overdueTasks > 3) {
+            setBottleneck({ 
+              message: 'AI Alert: High number of overdue tasks detected. Team capacity might be at risk.', 
+              type: 'HIGH' 
+            });
+          } else if (statsData.data.highPriorityDueToday > 2) {
+            setBottleneck({ 
+              message: 'AI Note: Multiple high-priority tasks due today. Focus on completion over new starts.', 
+              type: 'MEDIUM' 
+            });
+          }
+        }
       } catch (error) {
         console.error('Failed to fetch dashboard data:', error);
       } finally {
@@ -214,6 +229,20 @@ export default function DashboardPage() {
           <div className="absolute -bottom-4 right-20 h-24 w-24 rounded-full bg-white/5" />
         </div>
       </motion.div>
+
+      {/* AI Bottleneck Alert */}
+      {bottleneck && (
+        <motion.div 
+          variants={itemVariants}
+          className={cn(
+            "flex items-center gap-3 rounded-xl border px-4 py-3 shadow-sm",
+            bottleneck.type === 'HIGH' ? "border-rose-500/20 bg-rose-500/5 text-rose-500" : "border-amber-500/20 bg-amber-500/5 text-amber-500"
+          )}
+        >
+          <Sparkles className="h-4 w-4 shrink-0" />
+          <p className="text-sm font-medium">{bottleneck.message}</p>
+        </motion.div>
+      )}
 
       {/* Stats Cards */}
       <motion.div variants={itemVariants} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

@@ -103,6 +103,7 @@ export interface Project extends BaseEntity {
   ownerId: string;
   startDate?: Date | string | null;
   dueDate?: Date | string | null;
+  workflowConfig?: Record<string, unknown> | null;
 }
 
 export interface ProjectWithRelations extends Project {
@@ -143,6 +144,7 @@ export interface Task extends BaseEntity {
   estimatedHours?: number | null;
   actualHours?: number | null;
   position: number;
+  customFields?: Record<string, unknown> | null;
 }
 
 export interface TaskWithRelations extends Task {

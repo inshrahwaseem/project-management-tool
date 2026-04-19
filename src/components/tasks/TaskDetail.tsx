@@ -26,6 +26,7 @@ import {
   Send,
   Loader2,
   AlertCircle,
+  Sparkles,
 } from 'lucide-react';
 import { useTaskStore } from '@/stores/taskStore';
 import { FileUpload } from './FileUpload';
@@ -222,9 +223,33 @@ export function TaskDetail() {
 
                   {/* Description */}
                   <div>
-                    <label className="mb-1.5 block text-xs font-medium text-[hsl(var(--muted-foreground))]">
-                      Description
-                    </label>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="block text-xs font-medium text-[hsl(var(--muted-foreground))]">
+                        Description
+                      </label>
+                      <button
+                        onClick={async () => {
+                          try {
+                            const res = await fetch(`/api/v1/ai/suggest-subtasks`, {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ title: task.title, description: task.description })
+                            });
+                            const json = await res.json();
+                            if (json.success) {
+                              const subTasks = json.data.map((t: string) => `- [ ] ${t}`).join('\n');
+                              handleUpdate('description', (task.description ? task.description + '\n\n' : '') + '**AI Suggested Subtasks:**\n' + subTasks);
+                            }
+                          } catch (err) {
+                            console.error('AI Suggestion failed:', err);
+                          }
+                        }}
+                        className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-primary hover:text-primary/80"
+                      >
+                        <Sparkles className="h-3 w-3" />
+                        AI Breakdown
+                      </button>
+                    </div>
                     <textarea
                       value={task.description || ''}
                       onChange={(e) =>
@@ -258,6 +283,44 @@ export function TaskDetail() {
                         } : null);
                       }}
                     />
+                  </div>
+
+                  {/* Custom Fields */}
+                  <div className="pt-6 border-t border-[hsl(var(--border))]">
+                    <h4 className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[hsl(var(--muted-foreground))] mb-4">
+                      Custom Fields
+                    </h4>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      {Object.entries((task as any).customFields || {}).map(([key, value]) => (
+                        <div key={key} className="flex flex-col gap-1 rounded-lg border border-[hsl(var(--border))] bg-muted/20 p-2">
+                          <span className="text-[10px] font-medium text-[hsl(var(--muted-foreground))] capitalize">{key}</span>
+                          <div className="flex items-center justify-between">
+                            <input 
+                              type="text" 
+                              value={String(value)}
+                              onChange={(e) => {
+                                const newFields = { ...(task as any).customFields, [key]: e.target.value };
+                                handleUpdate('customFields', newFields);
+                              }}
+                              className="bg-transparent text-sm font-medium outline-none text-foreground w-full"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                      <button 
+                        onClick={() => {
+                          const name = prompt('Field Name:');
+                          if (name) {
+                            const newFields = { ...(task as any).customFields, [name]: 'Value' };
+                            handleUpdate('customFields', newFields);
+                          }
+                        }}
+                        className="flex h-[45px] items-center justify-center rounded-lg border border-dashed border-[hsl(var(--border))] px-3 text-xs font-medium text-[hsl(var(--muted-foreground))] hover:border-primary/50 hover:bg-primary/5 hover:text-primary transition-all"
+                      >
+                        <Plus className="mr-1 h-3 w-3" />
+                        Add Field
+                      </button>
+                    </div>
                   </div>
 
                   {/* Meta fields */}
