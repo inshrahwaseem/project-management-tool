@@ -27,6 +27,7 @@ import {
   Loader2,
   AlertCircle,
   Sparkles,
+  Plus,
 } from 'lucide-react';
 import { useTaskStore } from '@/stores/taskStore';
 import { FileUpload } from './FileUpload';
