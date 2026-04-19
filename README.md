@@ -1,64 +1,86 @@
 <div align="center">
-  <img src="https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js" alt="Next.js" />
+  <img src="https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js" alt="Next.js" />
   <img src="https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
   <img src="https://img.shields.io/badge/Prisma-ORM-2D3748?style=for-the-badge&logo=prisma" alt="Prisma" />
   <img src="https://img.shields.io/badge/PostgreSQL-Neon-336791?style=for-the-badge&logo=postgresql" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/Supabase-Storage-3ECF8E?style=for-the-badge&logo=supabase" alt="Supabase" />
+  <img src="https://img.shields.io/badge/AI-Gemini-8E75C2?style=for-the-badge&logo=google-gemini" alt="Gemini AI" />
 </div>
 
-<h1 align="center">ProFlow - Next-Generation Project Management Tool</h1>
+<h1 align="center">ProFlow - The Enterprise-Grade Project Management Engine</h1>
 
 <p align="center">
-  A highly scalable, modern, and intuitive Project Management application built to mirror the core functionalities of Jira & Asana. 
+  A high-scale, AI-powered Project Management application built for modern engineering teams. ProFlow mirrors the depth of Jira with the sleek aesthetics of Linear, featuring real-time collaboration, workflow automation, and deep analytics.
   <br />
   <strong><a href="https://proflow-project-ui.vercel.app">🔴 Live Demo (Vercel)</a></strong>
 </p>
 
-## ✨ Features
+## 🚀 Key Enterprise Features
 
-- **Modern Dark Theming**: Professionally crafted UI using a strict 60-30-10 Slate/Indigo/Green color palette with glassmorphic elements and clean aesthetics.
-- **Workflow Automations**: Intelligent trigger-action rules engine (e.g., auto-assign users when a task status moves to "In Progress").
-- **Real-Time Collaboration Chat**: Seamless project-specific messaging using advanced HTTP polling and optimistic UI updates for zero-latency feel without heavy websockets.
-- **Dynamic Task Board**: Full Kanban board implementation with drag-and-drop capability.
-- **Project Templates**: Auto-populate projects with industry-standard workflow templates (Agile, Bug Tracking, Marketing).
+### 🤖 1. AI Integration (Powered by Gemini)
+- **Smart Task Breakdowns**: One-click generation of actionable sub-tasks from high-level descriptions.
+- **Bottleneck Detection**: AI-driven analysis of project velocity to identify stalled workflows before they become blockers.
+- **Deadline Suggestions**: Intelligent estimation of completion dates based on task complexity.
 
-## 📸 Application Demo
+### 📊 2. Premium Analytics & Dashboards
+- **Velocity Tracking**: Detailed AreaCharts visualizing "Tasks Created vs. Completed" over time.
+- **Team Performance**: Real-time stats on sprint progress, completion percentages, and productivity trends.
+- **Audit Trails**: Full transparency with chronological activity logs showing every status move, comment, and update.
 
-Witness the stunning dark mode interface, responsive sidebar navigation, real-time workflow automations, and immediate team chat functionality:
+### 📎 3. Cloud File Management
+- **Supabase Integration**: Secure, direct-to-cloud file uploads for task attachments.
+- **Drag & Drop**: Modern, intuitive upload interface with support for PDFs, images, and documents.
+- **Metadata Sync**: Instant persistence of file data within the PostgreSQL ecosystem.
 
-<br />
+### 🛠️ 4. Workflow Automations & Customization
+- **Logic Engine**: Create rules like "When status moves to QA, auto-assign to [Lead Developer]".
+- **Custom Fields**: Tailor tasks to your team's needs with dynamic key-value fields (e.g., Cost, Browser, Priority).
+- **Interactive Timeline**: A professional Gantt view with real-time progress indicators.
 
-![ProFlow Demo Recording](./docs/demo-recording.webp)
+### 📱 5. Modern PWA Support
+- **Mobile Native Feel**: Installable on iOS, Android, and Desktop via Progressive Web App technology.
+- **Offline Readiness**: Service Worker integration for high-performance loading and native-like Shell.
 
 ## 🛠️ Technology Stack
 
-- **Frontend Core**: Next.js 14 API Routes + App Router, React Server Components.
-- **Styling**: Tailwind CSS v4, Framer Motion for premium micro-interactions.
-- **Backend & Database**: Neon Serverless PostgreSQL Database managed via Prisma ORM.
-- **State Management**: Zustand for global UI state & task management optimizations.
-- **Authentication**: NextAuth.js (Auth.js) with bcrypt credential integration.
+- **Framework**: Next.js 15 (App Router, Turbopack, Server Components).
+- **Styling**: Tailwind CSS v4, Framer Motion for high-end micro-interactions.
+- **Database & ORM**: Neon Serverless PostgreSQL + Prisma.
+- **Storage**: Supabase Storage for enterprise file handling.
+- **AI**: Google Generative AI (Gemini Flash 1.5).
+- **State Management**: Zustand (Optimistic UI updates).
+- **Auth**: NextAuth.js (Auth.js) with secure Credential providers.
 
-## 🚀 Getting Started Locally
+## ⚙️ Setup & Deployment
 
+### Environment Variables
+Create a `.env` file based on the provided enterprise template:
+```env
+DATABASE_URL="postgresql://..."
+NEXTAUTH_SECRET="..."
+NEXT_PUBLIC_SUPABASE_URL="..."
+NEXT_PUBLIC_SUPABASE_ANON_KEY="..."
+GOOGLE_GENERATIVE_AI_API_KEY="..."
+SLACK_WEBHOOK_URL="..."
+```
+
+### Installation
 ```bash
-# 1. Clone the repository
+# Clone
 git clone https://github.com/inshrahwaseem/project-management-tool.git
 
-# 2. Install dependencies
+# Install
 npm install
 
-# 3. Setup environment variables
-cp .env.example .env
-# Important: Update DATABASE_URL with a valid PostgreSQL string!
-
-# 4. Initialize Database
+# Database Sync & Client Generation
 npx prisma db push
 
-# 5. Start development server
+# Start (Development)
 npm run dev
 ```
 
 ---
 
 <p align="center">
-  Crafted meticulously for modern Engineering workflows.
+  Created with ❤️ by <strong>Inshrah Waseem</strong> for High-Performance Teams.
 </p>
