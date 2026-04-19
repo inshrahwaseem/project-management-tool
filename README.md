@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
+  <img src="https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js" alt="Next.js" />
+  <img src="https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Prisma-ORM-2D3748?style=for-the-badge&logo=prisma" alt="Prisma" />
+  <img src="https://img.shields.io/badge/PostgreSQL-Neon-336791?style=for-the-badge&logo=postgresql" alt="PostgreSQL" />
+</div>
 
-## Getting Started
+<h1 align="center">ProFlow - Next-Generation Project Management Tool</h1>
 
-First, run the development server:
+<p align="center">
+  A highly scalable, modern, and intuitive Project Management application built to mirror the core functionalities of Jira & Asana. 
+  <br />
+  <strong><a href="https://project-management-tool-zt8zqfj6k-inshrahwaseems-projects.vercel.app">🔴 Live Demo (Vercel)</a></strong>
+</p>
+
+## ✨ Features
+
+- **Modern Dark Theming**: Professionally crafted UI using a strict 60-30-10 Slate/Indigo/Green color palette with glassmorphic elements and clean aesthetics.
+- **Workflow Automations**: Intelligent trigger-action rules engine (e.g., auto-assign users when a task status moves to "In Progress").
+- **Real-Time Collaboration Chat**: Seamless project-specific messaging using advanced HTTP polling and optimistic UI updates for zero-latency feel without heavy websockets.
+- **Dynamic Task Board**: Full Kanban board implementation with drag-and-drop capability.
+- **Project Templates**: Auto-populate projects with industry-standard workflow templates (Agile, Bug Tracking, Marketing).
+
+## 📸 Application Demo
+
+Witness the stunning dark mode interface, responsive sidebar navigation, real-time workflow automations, and immediate team chat functionality:
+
+<br />
+
+![ProFlow Demo Recording](./docs/demo-recording.webp)
+
+## 🛠️ Technology Stack
+
+- **Frontend Core**: Next.js 14 API Routes + App Router, React Server Components.
+- **Styling**: Tailwind CSS v4, Framer Motion for premium micro-interactions.
+- **Backend & Database**: Neon Serverless PostgreSQL Database managed via Prisma ORM.
+- **State Management**: Zustand for global UI state & task management optimizations.
+- **Authentication**: NextAuth.js (Auth.js) with bcrypt credential integration.
+
+## 🚀 Getting Started Locally
 
 ```bash
+# 1. Clone the repository
+git clone https://github.com/inshrahwaseem/project-management-tool.git
+
+# 2. Install dependencies
+npm install
+
+# 3. Setup environment variables
+cp .env.example .env
+# Important: Update DATABASE_URL with a valid PostgreSQL string!
+
+# 4. Initialize Database
+npx prisma db push
+
+# 5. Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+<p align="center">
+  Crafted meticulously for modern Engineering workflows.
+</p>
