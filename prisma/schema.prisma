@@ -1,0 +1,449 @@
+// Project Management Tool — Prisma Schema
+// All tables use UUID primary keys, snake_case mapping, soft deletes, and proper indexes.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum ProjectStatus {
+  PLANNING
+  ACTIVE
+  ON_HOLD
+  COMPLETED
+  ARCHIVED
+}
+
+enum ProjectPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  IN_REVIEW
+  DONE
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum SprintStatus {
+  PLANNED
+  ACTIVE
+  COMPLETED
+}
+
+enum MemberRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+enum NotificationType {
+  TASK_ASSIGNED
+  TASK_UPDATED
+  COMMENT_ADDED
+  COMMENT_MENTION
+  DUE_DATE_REMINDER
+  MEMBER_INVITED
+  PROJECT_UPDATED
+  STATUS_CHANGED
+}
+
+// ─── Models ──────────────────────────────────────────────────────────────────
+
+/// User account — supports OAuth and credential-based auth
+model User {
+  id              String    @id @default(uuid())
+  name            String
+  email           String    @unique
+  emailVerified   DateTime? @map("email_verified")
+  passwordHash    String?   @map("password_hash")
+  image           String?
+  role            UserRole  @default(USER)
+  themePreference String    @default("dark") @map("theme_preference")
+  fontSizePref    String    @default("medium") @map("font_size_pref")
+  sidebarPref     String    @default("default") @map("sidebar_pref")
+  failedAttempts  Int       @default(0) @map("failed_attempts")
+  lockedUntil     DateTime? @map("locked_until")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  // Relations
+  ownedOrganizations Organization[]
+  ownedProjects      Project[]
+  assignedTasks      Task[]          @relation("TaskAssignee")
+  reportedTasks      Task[]          @relation("TaskReporter")
+  comments           Comment[]
+  attachments        Attachment[]
+  activityLogs       ActivityLog[]
+  notifications      Notification[]
+  projectMembers     ProjectMember[]
+  timeEntries        TimeEntry[]
+  messages           Message[]
+  accounts           Account[]
+  sessions           Session[]
+
+  @@index([email])
+  @@index([deletedAt])
+  @@map("users")
+}
+
+/// NextAuth Account model for OAuth providers
+model Account {
+  id                String  @id @default(uuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+/// NextAuth Session model
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+/// NextAuth Verification Token
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+/// Organization — top-level container for projects
+model Organization {
+  id        String    @id @default(uuid())
+  name      String
+  slug      String    @unique
+  ownerId   String    @map("owner_id")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Relations
+  owner    User      @relation(fields: [ownerId], references: [id])
+  projects Project[]
+
+  @@index([slug])
+  @@index([ownerId])
+  @@map("organizations")
+}
+
+/// Project — a collection of tasks belonging to an organization
+model Project {
+  id          String          @id @default(uuid())
+  title       String
+  description String?         @db.Text
+  status      ProjectStatus   @default(PLANNING)
+  priority    ProjectPriority @default(MEDIUM)
+  orgId       String          @map("org_id")
+  ownerId     String          @map("owner_id")
+  startDate   DateTime?       @map("start_date")
+  dueDate     DateTime?       @map("due_date")
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+  deletedAt   DateTime?       @map("deleted_at")
+
+  // Relations
+  organization Organization    @relation(fields: [orgId], references: [id])
+  owner        User            @relation(fields: [ownerId], references: [id])
+  tasks        Task[]
+  members      ProjectMember[]
+  tags         Tag[]
+  sprints      Sprint[]
+  messages     Message[]
+  automations  AutomationRule[]
+
+  @@index([orgId])
+  @@index([ownerId])
+  @@index([status])
+  @@index([dueDate])
+  @@index([deletedAt])
+  @@map("projects")
+}
+
+/// Task — work item within a project
+model Task {
+  id             String       @id @default(uuid())
+  title          String
+  description    String?      @db.Text
+  status         TaskStatus   @default(TODO)
+  priority       TaskPriority @default(MEDIUM)
+  projectId      String       @map("project_id")
+  sprintId       String?      @map("sprint_id")
+  assigneeId     String?      @map("assignee_id")
+  reporterId     String       @map("reporter_id")
+  startDate      DateTime?    @map("start_date")
+  dueDate        DateTime?    @map("due_date")
+  estimatedHours Float?       @map("estimated_hours")
+  actualHours    Float?       @map("actual_hours")
+  position       Int          @default(0)
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  deletedAt      DateTime?    @map("deleted_at")
+
+  // Relations
+  project     Project      @relation(fields: [projectId], references: [id])
+  sprint      Sprint?      @relation(fields: [sprintId], references: [id])
+  assignee    User?        @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  reporter    User         @relation("TaskReporter", fields: [reporterId], references: [id])
+  comments    Comment[]
+  attachments Attachment[]
+  tags        TaskTag[]
+  timeEntries TimeEntry[]
+
+  @@index([projectId])
+  @@index([assigneeId])
+  @@index([reporterId])
+  @@index([status])
+  @@index([priority])
+  @@index([dueDate])
+  @@index([deletedAt])
+  @@index([sprintId])
+  @@map("tasks")
+}
+
+/// Sprint — Timeboxed iteration for a project
+model Sprint {
+  id          String        @id @default(uuid())
+  name        String
+  goal        String?       @db.Text
+  status      SprintStatus  @default(PLANNED)
+  startDate   DateTime      @map("start_date")
+  endDate     DateTime      @map("end_date")
+  projectId   String        @map("project_id")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  // Relations
+  project     Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tasks       Task[]
+
+  @@index([projectId])
+  @@map("sprints")
+}
+
+/// Comment — discussion thread on a task
+model Comment {
+  id        String    @id @default(uuid())
+  content   String    @db.Text
+  taskId    String    @map("task_id")
+  authorId  String    @map("author_id")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  // Relations
+  task   Task @relation(fields: [taskId], references: [id])
+  author User @relation(fields: [authorId], references: [id])
+
+  @@index([taskId])
+  @@index([authorId])
+  @@map("comments")
+}
+
+/// Attachment — files uploaded to a task
+model Attachment {
+  id         String   @id @default(uuid())
+  fileUrl    String   @map("file_url")
+  fileName   String   @map("file_name")
+  fileSize   Int      @map("file_size")
+  fileType   String   @map("file_type")
+  taskId     String   @map("task_id")
+  uploadedBy String   @map("uploaded_by")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // Relations
+  task     Task @relation(fields: [taskId], references: [id])
+  uploader User @relation(fields: [uploadedBy], references: [id])
+
+  @@index([taskId])
+  @@map("attachments")
+}
+
+/// ActivityLog — audit trail for all actions
+model ActivityLog {
+  id         String   @id @default(uuid())
+  action     String
+  entityType String   @map("entity_type")
+  entityId   String   @map("entity_id")
+  userId     String   @map("user_id")
+  metadata   Json?
+  oldValue   Json?    @map("old_value")
+  newValue   Json?    @map("new_value")
+  ipAddress  String?  @map("ip_address")
+  userAgent  String?  @map("user_agent")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([entityType, entityId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("activity_logs")
+}
+
+/// Notification — user notifications
+model Notification {
+  id        String           @id @default(uuid())
+  type      NotificationType
+  message   String
+  userId    String           @map("user_id")
+  read      Boolean          @default(false)
+  link      String?
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  // Relations
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, read])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+/// ProjectMember — user membership in a project with role
+model ProjectMember {
+  id        String     @id @default(uuid())
+  projectId String     @map("project_id")
+  userId    String     @map("user_id")
+  role      MemberRole @default(MEMBER)
+  joinedAt  DateTime   @default(now()) @map("joined_at")
+
+  // Relations
+  project Project @relation(fields: [projectId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@unique([projectId, userId])
+  @@index([projectId])
+  @@index([userId])
+  @@map("project_members")
+}
+
+/// Tag — labels for organizing tasks
+model Tag {
+  id        String @id @default(uuid())
+  name      String
+  color     String @default("#6366f1")
+  projectId String @map("project_id")
+
+  // Relations
+  project Project   @relation(fields: [projectId], references: [id])
+  tasks   TaskTag[]
+
+  @@unique([name, projectId])
+  @@index([projectId])
+  @@map("tags")
+}
+
+/// TaskTag — many-to-many join between Task and Tag
+model TaskTag {
+  id     String @id @default(uuid())
+  taskId String @map("task_id")
+  tagId  String @map("tag_id")
+
+  // Relations
+  task Task @relation(fields: [taskId], references: [id])
+  tag  Tag  @relation(fields: [tagId], references: [id])
+
+  @@unique([taskId, tagId])
+  @@map("task_tags")
+}
+
+/// TimeEntry — hours logged against a task
+model TimeEntry {
+  id          String   @id @default(uuid())
+  taskId      String   @map("task_id")
+  userId      String   @map("user_id")
+  hours       Float
+  description String?  @db.Text
+  loggedAt    DateTime @default(now()) @map("logged_at")
+
+  // Relations
+  task Task @relation(fields: [taskId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([taskId])
+  @@index([userId])
+  @@index([loggedAt])
+  @@map("time_entries")
+}
+
+/// Message — Real-time chat inside a project
+model Message {
+  id        String   @id @default(uuid())
+  content   String   @db.Text
+  projectId String   @map("project_id")
+  senderId  String   @map("sender_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  sender    User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([senderId])
+  @@map("messages")
+}
+
+/// AutomationRule — Workflow automations (e.g., When status -> DONE, Assign to X)
+model AutomationRule {
+  id         String   @id @default(uuid())
+  projectId  String   @map("project_id")
+  name       String
+  trigger    String
+  condition  Json?
+  action     String
+  actionData Json?
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  // Relations
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("automation_rules")
+}

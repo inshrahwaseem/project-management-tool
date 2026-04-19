@@ -1,0 +1,268 @@
+/* ─── Theme CSS Variables ──────────────────────────────────────────────────
+ * 8 themes with CSS custom properties, applied via data-theme attribute.
+ * Smooth transitions on theme change — no flicker.
+ * ────────────────────────────────────────────────────────────────────────── */
+
+/* ─── Light Theme (Default) ──────────────────────────────────────────────── */
+[data-theme='light'] {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 238.7 83.5% 66.7%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 262.1 83.3% 57.8%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 192 91% 41.6%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 238.7 83.5% 66.7%;
+  --radius: 0.625rem;
+  --sidebar-bg: 210 40% 98%;
+  --sidebar-border: 214.3 31.8% 91.4%;
+  --sidebar-hover: 210 40% 94%;
+  --sidebar-active: 238.7 83.5% 96%;
+  --success: 142.1 76.2% 36.3%;
+  --warning: 38 92% 50%;
+  --info: 199 89% 48%;
+  --gradient-start: 238.7 83.5% 66.7%;
+  --gradient-end: 262.1 83.3% 57.8%;
+}
+
+/* ─── Dark Theme ─────────────────────────────────────────────────────────── */
+[data-theme='dark'] {
+  --background: 222 47% 11%;     /* #0F172A */
+  --foreground: 214 32% 91%;     /* #E2E8F0 */
+  --card: 215 32% 17%;           /* #1E293B */
+  --card-foreground: 214 32% 91%;
+  --popover: 215 32% 17%;
+  --popover-foreground: 214 32% 91%;
+  --primary: 239 84% 67%;        /* #6366F1 */
+  --primary-foreground: 222 47% 11%;
+  --secondary: 215 32% 25%;
+  --secondary-foreground: 214 32% 91%;
+  --muted: 215 32% 22%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 142 71% 45%;         /* #22C55E */
+  --accent-foreground: 222 47% 11%;
+  --destructive: 0 62.8% 50.6%;
+  --destructive-foreground: 214 32% 91%;
+  --border: 215 32% 25%;
+  --input: 215 32% 25%;
+  --ring: 239 84% 67%;
+  --radius: 0.75rem;            /* rounded-xl */
+  --sidebar-bg: 222 47% 9%;
+  --sidebar-border: 215 32% 17%;
+  --sidebar-hover: 215 32% 20%;
+  --sidebar-active: 239 84% 15%;
+  --success: 142 71% 45%;
+  --warning: 38 92% 50%;
+  --info: 199 89% 48%;
+  --gradient-start: 239 84% 67%;
+  --gradient-end: 142 71% 45%;
+}
+
+/* ─── Midnight Blue Theme ────────────────────────────────────────────────── */
+[data-theme='midnight'] {
+  --background: 219 58% 7%;
+  --foreground: 214 32% 91%;
+  --card: 219 45% 10%;
+  --card-foreground: 214 32% 91%;
+  --popover: 219 45% 10%;
+  --popover-foreground: 214 32% 91%;
+  --primary: 217 91% 68%;
+  --primary-foreground: 219 58% 7%;
+  --secondary: 232 70% 71%;
+  --secondary-foreground: 219 58% 7%;
+  --muted: 219 40% 13%;
+  --muted-foreground: 214 20% 55%;
+  --accent: 160 78% 52%;
+  --accent-foreground: 219 58% 7%;
+  --destructive: 0 62.8% 50.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 219 30% 18%;
+  --input: 219 30% 18%;
+  --ring: 217 91% 68%;
+  --radius: 0.625rem;
+  --sidebar-bg: 219 50% 8%;
+  --sidebar-border: 219 30% 15%;
+  --sidebar-hover: 219 40% 16%;
+  --sidebar-active: 217 91% 12%;
+  --success: 160 78% 52%;
+  --warning: 38 92% 50%;
+  --info: 199 89% 48%;
+  --gradient-start: 217 91% 68%;
+  --gradient-end: 232 70% 71%;
+}
+
+/* ─── Solarized Theme ────────────────────────────────────────────────────── */
+[data-theme='solarized'] {
+  --background: 192 100% 11%;
+  --foreground: 44 87% 94%;
+  --card: 192 81% 14%;
+  --card-foreground: 44 87% 94%;
+  --popover: 192 81% 14%;
+  --popover-foreground: 44 87% 94%;
+  --primary: 45 100% 36%;
+  --primary-foreground: 192 100% 11%;
+  --secondary: 18 89% 40%;
+  --secondary-foreground: 44 87% 94%;
+  --muted: 192 44% 17%;
+  --muted-foreground: 180 9% 52%;
+  --accent: 175 59% 40%;
+  --accent-foreground: 192 100% 11%;
+  --destructive: 1 71% 52%;
+  --destructive-foreground: 44 87% 94%;
+  --border: 192 30% 22%;
+  --input: 192 30% 22%;
+  --ring: 45 100% 36%;
+  --radius: 0.625rem;
+  --sidebar-bg: 192 100% 9%;
+  --sidebar-border: 192 30% 18%;
+  --sidebar-hover: 192 44% 20%;
+  --sidebar-active: 45 100% 14%;
+  --success: 68 100% 30%;
+  --warning: 18 89% 40%;
+  --info: 175 59% 40%;
+  --gradient-start: 45 100% 36%;
+  --gradient-end: 18 89% 40%;
+}
+
+/* ─── Nord Theme ─────────────────────────────────────────────────────────── */
+[data-theme='nord'] {
+  --background: 220 16% 22%;
+  --foreground: 219 28% 94%;
+  --card: 222 16% 25%;
+  --card-foreground: 219 28% 94%;
+  --popover: 222 16% 25%;
+  --popover-foreground: 219 28% 94%;
+  --primary: 193 43% 67%;
+  --primary-foreground: 220 16% 22%;
+  --secondary: 213 32% 52%;
+  --secondary-foreground: 219 28% 94%;
+  --muted: 220 16% 28%;
+  --muted-foreground: 219 15% 60%;
+  --accent: 92 28% 59%;
+  --accent-foreground: 220 16% 22%;
+  --destructive: 354 42% 56%;
+  --destructive-foreground: 219 28% 94%;
+  --border: 220 14% 32%;
+  --input: 220 14% 32%;
+  --ring: 193 43% 67%;
+  --radius: 0.625rem;
+  --sidebar-bg: 220 16% 20%;
+  --sidebar-border: 220 14% 28%;
+  --sidebar-hover: 220 16% 30%;
+  --sidebar-active: 193 43% 18%;
+  --success: 92 28% 59%;
+  --warning: 40 71% 73%;
+  --info: 193 43% 67%;
+  --gradient-start: 193 43% 67%;
+  --gradient-end: 213 32% 52%;
+}
+
+/* ─── Dracula Theme ──────────────────────────────────────────────────────── */
+[data-theme='dracula'] {
+  --background: 231 15% 18%;
+  --foreground: 60 30% 96%;
+  --card: 230 14% 24%;
+  --card-foreground: 60 30% 96%;
+  --popover: 230 14% 24%;
+  --popover-foreground: 60 30% 96%;
+  --primary: 265 89% 78%;
+  --primary-foreground: 231 15% 18%;
+  --secondary: 326 100% 74%;
+  --secondary-foreground: 231 15% 18%;
+  --muted: 230 14% 28%;
+  --muted-foreground: 230 10% 55%;
+  --accent: 135 94% 65%;
+  --accent-foreground: 231 15% 18%;
+  --destructive: 0 72% 67%;
+  --destructive-foreground: 231 15% 18%;
+  --border: 230 12% 32%;
+  --input: 230 12% 32%;
+  --ring: 265 89% 78%;
+  --radius: 0.625rem;
+  --sidebar-bg: 231 15% 16%;
+  --sidebar-border: 230 12% 24%;
+  --sidebar-hover: 230 14% 28%;
+  --sidebar-active: 265 89% 20%;
+  --success: 135 94% 65%;
+  --warning: 65 92% 76%;
+  --info: 191 97% 77%;
+  --gradient-start: 265 89% 78%;
+  --gradient-end: 326 100% 74%;
+}
+
+/* ─── Tokyo Night Theme ──────────────────────────────────────────────────── */
+[data-theme='tokyo-night'] {
+  --background: 235 21% 13%;
+  --foreground: 226 64% 88%;
+  --card: 235 18% 16%;
+  --card-foreground: 226 64% 88%;
+  --popover: 235 18% 16%;
+  --popover-foreground: 226 64% 88%;
+  --primary: 224 78% 72%;
+  --primary-foreground: 235 21% 13%;
+  --secondary: 265 78% 75%;
+  --secondary-foreground: 235 21% 13%;
+  --muted: 235 18% 20%;
+  --muted-foreground: 228 20% 50%;
+  --accent: 85 57% 52%;
+  --accent-foreground: 235 21% 13%;
+  --destructive: 348 86% 61%;
+  --destructive-foreground: 235 21% 13%;
+  --border: 235 15% 24%;
+  --input: 235 15% 24%;
+  --ring: 224 78% 72%;
+  --radius: 0.625rem;
+  --sidebar-bg: 235 21% 11%;
+  --sidebar-border: 235 15% 20%;
+  --sidebar-hover: 235 18% 22%;
+  --sidebar-active: 224 78% 15%;
+  --success: 85 57% 52%;
+  --warning: 40 80% 64%;
+  --info: 199 76% 64%;
+  --gradient-start: 224 78% 72%;
+  --gradient-end: 265 78% 75%;
+}
+
+/* ─── High Contrast Theme ────────────────────────────────────────────────── */
+[data-theme='high-contrast'] {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --card: 0 0% 6%;
+  --card-foreground: 0 0% 100%;
+  --popover: 0 0% 6%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 60 100% 50%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 180 100% 50%;
+  --secondary-foreground: 0 0% 0%;
+  --muted: 0 0% 10%;
+  --muted-foreground: 0 0% 70%;
+  --accent: 25 100% 50%;
+  --accent-foreground: 0 0% 0%;
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 30%;
+  --input: 0 0% 30%;
+  --ring: 60 100% 50%;
+  --radius: 0.625rem;
+  --sidebar-bg: 0 0% 4%;
+  --sidebar-border: 0 0% 20%;
+  --sidebar-hover: 0 0% 15%;
+  --sidebar-active: 60 100% 10%;
+  --success: 120 100% 40%;
+  --warning: 45 100% 50%;
+  --info: 210 100% 60%;
+  --gradient-start: 60 100% 50%;
+  --gradient-end: 180 100% 50%;
+}
