@@ -12,8 +12,26 @@ import { slugify } from '@/lib/utils';
 import prisma from '@/lib/prisma';
 import logger from '@/lib/logger';
 
+import { rateLimit } from '@/lib/rate-limit';
+
+const limiter = rateLimit({
+  interval: 60 * 1000, // 1 minute
+  uniqueTokenPerInterval: 500,
+});
+
 export async function POST(request: NextRequest) {
   try {
+    // Apply rate limiting (5 requests per minute per IP)
+    const ip = request.headers.get('x-forwarded-for') ?? '127.0.0.1';
+    try {
+      await limiter.check(5, ip);
+    } catch {
+      return errorResponse({
+        message: 'Too many registration attempts. Please try again later.',
+        status: 429,
+      });
+    }
+
     const body = await request.json();
 
     // Validate input
