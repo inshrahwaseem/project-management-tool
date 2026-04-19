@@ -73,7 +73,7 @@ export class TaskService {
    * Get a single task with full details.
    */
   static async getTaskById(id: string) {
-    return prisma.task.findFirst({
+    const task = await prisma.task.findFirst({
       where: { id, deletedAt: null },
       include: {
         assignee: {
@@ -117,6 +117,22 @@ export class TaskService {
         },
       },
     });
+
+    if (!task) return null;
+
+    // Fetch activity logs separately since they are polymorphic
+    const activityLogs = await prisma.activityLog.findMany({
+      where: { entityId: id, entityType: 'task' },
+      include: {
+        user: {
+          select: { id: true, name: true, image: true },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 20,
+    });
+
+    return { ...task, activityLogs };
   }
 
   /**

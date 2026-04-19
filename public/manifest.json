@@ -1,0 +1,21 @@
+{
+  "name": "ProFlow - AI Project Manager",
+  "short_name": "ProFlow",
+  "description": "Modern Project Management with Real-time collaboration and analytics.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "/next.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/next.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

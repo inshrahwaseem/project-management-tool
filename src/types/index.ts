@@ -153,6 +153,7 @@ export interface TaskWithRelations extends Task {
   attachments?: Attachment[];
   tags?: TaskTagWithTag[];
   timeEntries?: TimeEntry[];
+  activityLogs?: ActivityLog[];
   _count?: {
     comments: number;
     attachments: number;

@@ -28,6 +28,8 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { useTaskStore } from '@/stores/taskStore';
+import { FileUpload } from './FileUpload';
+import { AttachmentList } from './AttachmentList';
 import type { TaskWithRelations, CommentWithAuthor } from '@/types';
 
 export function TaskDetail() {
@@ -235,6 +237,29 @@ export function TaskDetail() {
                     />
                   </div>
 
+                  {/* Attachments Section */}
+                  <div className="space-y-4">
+                    <AttachmentList 
+                      taskId={task.id} 
+                      attachments={task.attachments || []} 
+                      onRemove={(id) => {
+                        setTask(prev => prev ? {
+                          ...prev,
+                          attachments: prev.attachments?.filter(a => a.id !== id)
+                        } : null);
+                      }}
+                    />
+                    <FileUpload 
+                      taskId={task.id} 
+                      onUploadSuccess={(newAttachment) => {
+                        setTask(prev => prev ? {
+                          ...prev,
+                          attachments: [...(prev.attachments || []), newAttachment]
+                        } : null);
+                      }}
+                    />
+                  </div>
+
                   {/* Meta fields */}
                   <div className="space-y-3">
                     {/* Assignee */}
@@ -383,9 +408,52 @@ export function TaskDetail() {
 
                     {/* Activity Tab */}
                     {activeTab === 'activity' && (
-                      <div className="mt-4 py-8 text-center text-sm text-[hsl(var(--muted-foreground))]">
-                        Activity history coming soon
-                      </div>
+                       <div className="mt-4 space-y-4">
+                         {task.activityLogs?.map((log) => (
+                           <div key={log.id} className="relative flex gap-3 pb-4">
+                             {/* Connector Line */}
+                             <div className="absolute left-4 top-8 -bottom-4 w-px bg-border group-last:hidden" />
+                             
+                             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-bold">
+                               {log.user ? getInitials(log.user.name) : 'A'}
+                             </div>
+                             
+                             <div className="flex-1">
+                               <div className="flex items-center gap-2">
+                                 <span className="text-sm font-semibold text-foreground">
+                                   {log.user?.name || 'System'}
+                                 </span>
+                                 <span className="text-xs text-muted-foreground">
+                                   {formatRelativeTime(log.createdAt)}
+                                 </span>
+                               </div>
+                               
+                               <div className="mt-1 text-sm text-muted-foreground">
+                                 {log.action === 'task.created' && 'created this task'}
+                                 {log.action === 'task.updated' && (
+                                   <div className="space-y-1">
+                                     <p>updated the task</p>
+                                     <div className="flex flex-wrap gap-2 mt-1">
+                                       {log.newValue && Object.entries(log.newValue as any).map(([key, val]) => (
+                                          <span key={key} className="inline-flex items-center rounded bg-muted px-1.5 py-0.5 text-[10px]">
+                                            <span className="capitalize mr-1">{key}:</span>
+                                            <span className="text-foreground font-medium">{String(val)}</span>
+                                          </span>
+                                       ))}
+                                     </div>
+                                   </div>
+                                 )}
+                                 {log.action === 'comment.created' && 'added a comment'}
+                               </div>
+                             </div>
+                           </div>
+                         ))}
+                         {(!task.activityLogs || task.activityLogs.length === 0) && (
+                           <div className="py-8 text-center text-sm text-muted-foreground">
+                             No activity recorded yet
+                           </div>
+                         )}
+                       </div>
                     )}
 
                     {/* Time Tab */}

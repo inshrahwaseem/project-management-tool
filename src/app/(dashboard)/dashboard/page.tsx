@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { DashboardChart } from '@/components/dashboard/DashboardChart';
 
 // Types for API responses
 interface DashboardStats {
@@ -240,6 +241,11 @@ export default function DashboardPage() {
                 </div>
               </div>
             ))}
+      </motion.div>
+
+      {/* Analytics Chart */}
+      <motion.div variants={itemVariants}>
+        <DashboardChart />
       </motion.div>
 
       <div className="grid gap-6 lg:grid-cols-5">
