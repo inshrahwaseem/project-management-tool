@@ -27,7 +27,7 @@ export class AIService {
     const text = response.text();
     
     // Simple JSON extraction to be safe
-    const match = text.match(/\[.*\]/s);
+    const match = text.match(/\[[\s\S]*\]/);
     return match ? JSON.parse(match[0]) : [];
   }
 
