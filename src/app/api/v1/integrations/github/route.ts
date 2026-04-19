@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
 
         if (task && task.status !== 'DONE') {
           // Update task to DONE
-          await TaskService.updateTask(task.id, { status: 'DONE' }, 'github-system', 'GitHub Auto-Close (Commit: ' + commit.id.substring(0, 7) + ')');
+          await TaskService.updateTask(task.id, { status: 'DONE' }, 'github-system');
           logger.info(`GitHub Webhook: Task ${task.id} closed successfully`);
         }
       }
