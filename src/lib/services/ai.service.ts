@@ -1,32 +1,38 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import Anthropic from '@anthropic-ai/sdk';
 
 /**
- * AI Assistant Service — Powered by Google Gemini
- * Provides smart task breakdowns, deadline suggestions, and bottleneck detection.
+ * AI Assistant Service — Powered by Claude (Anthropic)
+ * Provides smart task breakdowns, deadline suggestions, weekly summaries, and bottleneck detection.
  */
 
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY || '');
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+function getClient() {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) throw new Error('ANTHROPIC_API_KEY not configured');
+  return new Anthropic({ apiKey });
+}
 
 export class AIService {
   /**
    * Breakdown a task into smaller, actionable sub-tasks.
    */
-  static async suggestSubTasks(title: string, description?: string) {
-    if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
-      throw new Error('AI API Key not configured');
-    }
+  static async suggestSubTasks(title: string, description?: string): Promise<string[]> {
+    const client = getClient();
 
-    const prompt = `You are a project management assistant. Breakdown the following task into 4-6 small, actionable sub-tasks. 
-    Return as a JSON array of strings only.
-    Task Title: ${title}
-    Task Description: ${description || 'No description'}`;
+    const message = await client.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 512,
+      messages: [
+        {
+          role: 'user',
+          content: `You are a project management assistant. Breakdown the following task into 4-6 small, actionable sub-tasks.
+Return ONLY a JSON array of strings, nothing else.
+Task Title: ${title}
+Task Description: ${description || 'No description'}`,
+        },
+      ],
+    });
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    
-    // Simple JSON extraction to be safe
+    const text = message.content[0].type === 'text' ? message.content[0].text : '';
     const match = text.match(/\[[\s\S]*\]/);
     return match ? JSON.parse(match[0]) : [];
   }
@@ -34,18 +40,77 @@ export class AIService {
   /**
    * Suggest a realistic deadline based on task complexity.
    */
-  static async suggestDeadline(title: string, priority: string) {
-    const prompt = `Given a task "${title}" with priority ${priority}, suggest how many days it should take to complete optimally. 
-    Return a single integer representind days (e.g. 3).`;
+  static async suggestDeadline(title: string, priority: string): Promise<Date> {
+    const client = getClient();
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const message = await client.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 64,
+      messages: [
+        {
+          role: 'user',
+          content: `Given a task "${title}" with priority ${priority}, suggest how many days it should take to complete optimally. Return a single integer only (e.g. 3).`,
+        },
+      ],
+    });
+
+    const text = message.content[0].type === 'text' ? message.content[0].text : '3';
     const days = parseInt(text.replace(/\D/g, '')) || 3;
-    
+
     const deadline = new Date();
     deadline.setDate(deadline.getDate() + days);
     return deadline;
+  }
+
+  /**
+   * Generate an AI-powered weekly summary for a project.
+   */
+  static async generateWeeklySummary(projectTitle: string, stats: {
+    completed: number;
+    created: number;
+    overdue: number;
+    inProgress: number;
+  }): Promise<string> {
+    const client = getClient();
+
+    const message = await client.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 300,
+      messages: [
+        {
+          role: 'user',
+          content: `You are a project management assistant. Write a concise, professional weekly status summary for the project "${projectTitle}".
+Stats this week:
+- Tasks completed: ${stats.completed}
+- Tasks created: ${stats.created}
+- Overdue tasks: ${stats.overdue}
+- Currently in progress: ${stats.inProgress}
+Keep it to 3-4 sentences, professional tone, highlight risks if any.`,
+        },
+      ],
+    });
+
+    return message.content[0].type === 'text' ? message.content[0].text : 'No summary available.';
+  }
+
+  /**
+   * Expand a task title into a full description.
+   */
+  static async expandDescription(title: string): Promise<string> {
+    const client = getClient();
+
+    const message = await client.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 300,
+      messages: [
+        {
+          role: 'user',
+          content: `You are a project management assistant. Given the task title "${title}", write a professional task description with acceptance criteria. Keep it concise (3-5 bullet points). Use markdown formatting.`,
+        },
+      ],
+    });
+
+    return message.content[0].type === 'text' ? message.content[0].text : '';
   }
 
   /**
@@ -57,16 +122,27 @@ export class AIService {
       return acc;
     }, {});
 
-    // Heuristic: If more than 40% of tasks are in 'IN_PROGRESS' or 'IN_REVIEW', it's a bottleneck
     const total = tasks.length;
     if (total === 0) return null;
 
     const reviewRatio = (statusCounts['IN_REVIEW'] || 0) / total;
+    const overdueCount = tasks.filter(
+      (t) => t.dueDate && new Date(t.dueDate) < new Date() && t.status !== 'DONE'
+    ).length;
+
+    if (overdueCount > total * 0.3) {
+      return {
+        type: 'OVERDUE',
+        message: `${overdueCount} tasks are overdue (${Math.round((overdueCount / total) * 100)}%). Team capacity may be at risk.`,
+        severity: 'HIGH',
+      };
+    }
+
     if (reviewRatio > 0.3) {
       return {
         type: 'IN_REVIEW',
         message: 'High concentration of tasks in Review. Code quality or testing might be slow.',
-        severity: 'MEDIUM'
+        severity: 'MEDIUM',
       };
     }
 

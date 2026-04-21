@@ -32,6 +32,7 @@ import {
 import { useTaskStore } from '@/stores/taskStore';
 import { FileUpload } from './FileUpload';
 import { AttachmentList } from './AttachmentList';
+import { TaskTimer } from './TaskTimer';
 import type { TaskWithRelations, CommentWithAuthor } from '@/types';
 
 export function TaskDetail() {
@@ -151,6 +152,13 @@ export function TaskDetail() {
                 <X className="h-5 w-5" />
               </button>
             </div>
+
+            {/* Live Timer */}
+            {task && (
+              <div className="border-b border-[hsl(var(--border))] px-6 py-2">
+                <TaskTimer taskId={task.id} taskTitle={task.title} />
+              </div>
+            )}
 
             {/* Content */}
             {isLoading ? (

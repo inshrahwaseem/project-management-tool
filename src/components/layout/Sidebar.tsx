@@ -24,6 +24,7 @@ import {
   CalendarDays,
   BarChart3,
   Users,
+  Shield,
 } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import { getInitials } from '@/lib/utils';
@@ -46,7 +47,7 @@ const navItems = [
   },
   {
     label: 'Team',
-    href: '/team',
+    href: '/team/workload',
     icon: Users,
   },
   {
@@ -71,6 +72,11 @@ const bottomNavItems = [
     label: 'Settings',
     href: '/settings/profile',
     icon: Settings,
+  },
+  {
+    label: 'Security',
+    href: '/settings/security',
+    icon: Shield,
   },
   {
     label: 'Appearance',

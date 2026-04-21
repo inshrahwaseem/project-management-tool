@@ -197,6 +197,8 @@ model Project {
   sprints      Sprint[]
   messages     Message[]
   automations  AutomationRule[]
+  milestones   Milestone[]
+  expenses     Expense[]
 
   @@index([orgId])
   @@index([ownerId])
@@ -448,4 +450,53 @@ model AutomationRule {
 
   @@index([projectId])
   @@map("automation_rules")
+}
+
+/// Milestone — Key checkpoints within a project
+model Milestone {
+  id          String    @id @default(uuid())
+  title       String
+  description String?   @db.Text
+  dueDate     DateTime? @map("due_date")
+  status      String    @default("OPEN") // OPEN, COMPLETED
+  projectId   String    @map("project_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("milestones")
+}
+
+/// Expense — Budget tracking per project
+model Expense {
+  id         String   @id @default(uuid())
+  title      String
+  amount     Float
+  currency   String   @default("USD")
+  category   String   @default("Other") // Design, Development, Marketing, Tools, Other
+  date       DateTime @default(now())
+  receiptUrl String?  @map("receipt_url")
+  projectId  String   @map("project_id")
+  createdBy  String   @map("created_by")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // Relations
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@map("expenses")
+}
+
+/// TwoFactorSecret — TOTP 2FA secrets per user
+model TwoFactorSecret {
+  id        String   @id @default(uuid())
+  userId    String   @unique @map("user_id")
+  secret    String
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("two_factor_secrets")
 }

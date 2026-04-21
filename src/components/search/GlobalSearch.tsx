@@ -169,9 +169,29 @@ export function GlobalSearch() {
               )}
 
               {results.length === 0 && query.length < 2 && (
-                <div className="py-8 text-center text-sm text-[hsl(var(--muted-foreground))]">
-                  <Command className="mx-auto mb-2 h-8 w-8 opacity-50" />
-                  Type to search across your workspace
+                <div className="space-y-1">
+                  <p className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[hsl(var(--muted-foreground))]">
+                    Quick Actions
+                  </p>
+                  {[
+                    { label: 'Go to Dashboard', link: '/dashboard', icon: '🏠' },
+                    { label: 'Go to Projects', link: '/projects', icon: '📁' },
+                    { label: 'Go to My Tasks', link: '/tasks', icon: '✅' },
+                    { label: 'Go to Calendar', link: '/calendar', icon: '📅' },
+                    { label: 'Go to Reports', link: '/reports', icon: '📊' },
+                    { label: 'Go to Team Workload', link: '/team/workload', icon: '👥' },
+                    { label: 'Go to Settings', link: '/settings/profile', icon: '⚙️' },
+                  ].map((action, index) => (
+                    <button
+                      key={action.link}
+                      onClick={() => { router.push(action.link); setIsOpen(false); }}
+                      className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))] transition-colors"
+                    >
+                      <span>{action.icon}</span>
+                      <span className="font-medium">{action.label}</span>
+                      <ArrowRight className="ml-auto h-3 w-3 text-[hsl(var(--muted-foreground))]" />
+                    </button>
+                  ))}
                 </div>
               )}
 
