@@ -4,7 +4,7 @@
 
   **A production-ready, AI-enhanced task and project management ecosystem designed for modern enterprise teams.**
 
-  [![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_Platform-6366f1?style=for-the-badge&logo=vercel)](https://project-management-tool-pro.vercel.app)
+  [![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_Platform-6366f1?style=for-the-badge&logo=vercel)](https://proflow-project-ui.vercel.app)
   
   [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
@@ -28,16 +28,16 @@ Moving beyond basic task managers, ProFlow incorporates sophisticated features e
 
 <div align="center">
 
-![Dashboard Overview](./public/screenshots/dashboard.png)
+![Dashboard Overview](./public/screenshots/dashboard.svg)
 *Executive Dashboard: High-level overview of team workload, recent activity, and active project health metrics.*
 
-![Kanban Interface](./public/screenshots/kanban.png)
+![Kanban Interface](./public/screenshots/kanban.svg)
 *Interactive Kanban: Drag-and-drop workflow management with real-time synchronization.*
 
-![Milestone Tracking](./public/screenshots/milestones.png)
+![Milestone Tracking](./public/screenshots/milestones.svg)
 *Milestone Timeline: Track critical project phases, deadlines, and overall progress completion.*
 
-![Budget & Expenses](./public/screenshots/budget.png)
+![Budget & Expenses](./public/screenshots/budget.svg)
 *Financial Analytics: Categorized budget tracking and expense management for project lifecycle cost analysis.*
 
 </div>
