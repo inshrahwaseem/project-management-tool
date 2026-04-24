@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { generateSecret, generateURI, verifySync, TOTP } from 'otplib';
+import { generateSecret, generateURI, verify } from 'otplib';
 import QRCode from 'qrcode';
 
 /**
@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
   const record = await prisma.twoFactorSecret.findUnique({ where: { userId } });
   if (!record) return NextResponse.json({ success: false, message: '2FA not initialized' }, { status: 400 });
 
-  const isValid = verifySync({ token: code, secret: record.secret });
+  const isValid = verify({ token: code, secret: record.secret });
   if (!isValid) return NextResponse.json({ success: false, message: 'Invalid code. Try again.' }, { status: 400 });
 
   await prisma.twoFactorSecret.update({
