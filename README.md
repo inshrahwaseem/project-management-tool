@@ -1,86 +1,127 @@
 <div align="center">
-  <img src="https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js" alt="Next.js" />
-  <img src="https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
-  <img src="https://img.shields.io/badge/Prisma-ORM-2D3748?style=for-the-badge&logo=prisma" alt="Prisma" />
-  <img src="https://img.shields.io/badge/PostgreSQL-Neon-336791?style=for-the-badge&logo=postgresql" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/Supabase-Storage-3ECF8E?style=for-the-badge&logo=supabase" alt="Supabase" />
-  <img src="https://img.shields.io/badge/AI-Gemini-8E75C2?style=for-the-badge&logo=google-gemini" alt="Gemini AI" />
+  
+  # ProFlow: Enterprise SaaS Project Management Platform
+
+  **A production-ready, AI-enhanced task and project management ecosystem designed for modern teams.**
+
+  [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+  [![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=for-the-badge&logo=prisma)](https://www.prisma.io/)
+  [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-336791?style=for-the-badge&logo=postgresql)](https://neon.tech/)
+  [![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+
 </div>
-
-<h1 align="center">ProFlow - The Enterprise-Grade Project Management Engine</h1>
-
-<p align="center">
-  A high-scale, AI-powered Project Management application built for modern engineering teams. ProFlow mirrors the depth of Jira with the sleek aesthetics of Linear, featuring real-time collaboration, workflow automation, and deep analytics.
-  <br />
-  <strong><a href="https://proflow-project-ui.vercel.app">🔴 Live Demo (Vercel)</a></strong>
-</p>
-
-## 🚀 Key Enterprise Features
-
-### 🤖 1. AI Integration (Powered by Gemini)
-- **Smart Task Breakdowns**: One-click generation of actionable sub-tasks from high-level descriptions.
-- **Bottleneck Detection**: AI-driven analysis of project velocity to identify stalled workflows before they become blockers.
-- **Deadline Suggestions**: Intelligent estimation of completion dates based on task complexity.
-
-### 📊 2. Premium Analytics & Dashboards
-- **Velocity Tracking**: Detailed AreaCharts visualizing "Tasks Created vs. Completed" over time.
-- **Team Performance**: Real-time stats on sprint progress, completion percentages, and productivity trends.
-- **Audit Trails**: Full transparency with chronological activity logs showing every status move, comment, and update.
-
-### 📎 3. Cloud File Management
-- **Supabase Integration**: Secure, direct-to-cloud file uploads for task attachments.
-- **Drag & Drop**: Modern, intuitive upload interface with support for PDFs, images, and documents.
-- **Metadata Sync**: Instant persistence of file data within the PostgreSQL ecosystem.
-
-### 🛠️ 4. Workflow Automations & Customization
-- **Logic Engine**: Create rules like "When status moves to QA, auto-assign to [Lead Developer]".
-- **Custom Fields**: Tailor tasks to your team's needs with dynamic key-value fields (e.g., Cost, Browser, Priority).
-- **Interactive Timeline**: A professional Gantt view with real-time progress indicators.
-
-### 📱 5. Modern PWA Support
-- **Mobile Native Feel**: Installable on iOS, Android, and Desktop via Progressive Web App technology.
-- **Offline Readiness**: Service Worker integration for high-performance loading and native-like Shell.
-
-## 🛠️ Technology Stack
-
-- **Framework**: Next.js 15 (App Router, Turbopack, Server Components).
-- **Styling**: Tailwind CSS v4, Framer Motion for high-end micro-interactions.
-- **Database & ORM**: Neon Serverless PostgreSQL + Prisma.
-- **Storage**: Supabase Storage for enterprise file handling.
-- **AI**: Google Generative AI (Gemini Flash 1.5).
-- **State Management**: Zustand (Optimistic UI updates).
-- **Auth**: NextAuth.js (Auth.js) with secure Credential providers.
-
-## ⚙️ Setup & Deployment
-
-### Environment Variables
-Create a `.env` file based on the provided enterprise template:
-```env
-DATABASE_URL="postgresql://..."
-NEXTAUTH_SECRET="..."
-NEXT_PUBLIC_SUPABASE_URL="..."
-NEXT_PUBLIC_SUPABASE_ANON_KEY="..."
-GOOGLE_GENERATIVE_AI_API_KEY="..."
-SLACK_WEBHOOK_URL="..."
-```
-
-### Installation
-```bash
-# Clone
-git clone https://github.com/inshrahwaseem/project-management-tool.git
-
-# Install
-npm install
-
-# Database Sync & Client Generation
-npx prisma db push
-
-# Start (Development)
-npm run dev
-```
 
 ---
 
-<p align="center">
-  Created with ❤️ by <strong>Inshrah Waseem</strong> for High-Performance Teams.
-</p>
+## 🚀 Overview
+
+ProFlow is a comprehensive, enterprise-grade SaaS application engineered to streamline workflows, enhance team collaboration, and provide deep insights into project health. Built from the ground up with a focus on performance, security, and exceptional user experience, this platform demonstrates mastery of modern full-stack web development.
+
+Moving beyond basic task managers, ProFlow incorporates sophisticated features essential for real-world enterprise environments, including real-time synchronization, advanced role-based access control (RBAC), multi-factor authentication (MFA), and automated budget tracking.
+
+---
+
+## 📸 Platform Highlights
+
+<div align="center">
+
+![Dashboard Overview](file:///C:/Users/ELITEBOOK/.gemini/antigravity/brain/208820ee-e055-41d1-b687-2a5210a856e0/dashboard_overview_1777059232711.png)
+*Executive Dashboard: High-level overview of team workload, recent activity, and active project health metrics.*
+
+![Kanban Interface](file:///C:/Users/ELITEBOOK/.gemini/antigravity/brain/208820ee-e055-41d1-b687-2a5210a856e0/kanban_board_1777059270075.png)
+*Interactive Kanban: Drag-and-drop workflow management with real-time Pusher.js synchronization.*
+
+![Milestone Tracking](file:///C:/Users/ELITEBOOK/.gemini/antigravity/brain/208820ee-e055-41d1-b687-2a5210a856e0/project_milestones_1777059783470.png)
+*Milestone Timeline: Track critical project phases, deadlines, and overall progress completion.*
+
+![Budget & Expenses](file:///C:/Users/ELITEBOOK/.gemini/antigravity/brain/208820ee-e055-41d1-b687-2a5210a856e0/budget_expenses_1777059294644.png)
+*Financial Analytics: Categorized budget tracking and expense management for project lifecycle cost analysis.*
+
+</div>
+
+---
+
+## 💎 Enterprise-Ready Features
+
+### 🔐 Security & Authentication
+- **Multi-Factor Authentication (2FA/TOTP):** Robust account security utilizing `otplib` and QR code generation for authenticator app integration.
+- **NextAuth Integration:** Secure, session-based authentication supporting both email/password credentials and OAuth providers.
+- **Role-Based Access Control (RBAC):** Granular permissions defining Owner, Admin, and Member capabilities across project scopes.
+
+### 📊 Project & Financial Management
+- **Budget & Expense Tracking:** Dedicated financial dashboards to monitor project spending, categorize expenses, and visualize budget consumption via interactive charts.
+- **Milestone Management:** Strategic checkpoint tracking with progress visualizations and deadline monitoring.
+- **Comprehensive Time Tracking:** Embedded task stopwatches and manual time logs to measure actual vs. estimated effort, automatically updating project analytics.
+
+### ⚡ Real-Time Collaboration & Productivity
+- **Live Sync Engine:** Leveraging `pusher-js` and `pusher` server for instant updates across Kanban boards, comments, and notifications without browser refreshes.
+- **Workload Analytics:** Capacity planning algorithms that visually flag overloaded team members and distribute tasks efficiently.
+- **AI-Powered Assistance:** Integration with AI endpoints to automatically suggest task breakdowns and subtasks based on context.
+- **Advanced File Management:** Secure attachment uploads utilizing `UploadThing` with optimized file delivery.
+
+### 🎨 Architecture & UI/UX
+- **Optimized Data Layer:** Prisma ORM communicating with a serverless Neon PostgreSQL database, utilizing PostgreSQL Full-Text Search for highly performant, sub-second global queries.
+- **Glassmorphic Design System:** A highly polished, responsive, and accessible UI crafted with Tailwind CSS and Framer Motion for buttery-smooth micro-interactions.
+- **Type-Safe Full-Stack:** Strict TypeScript enforcement from database schema to React components, ensuring high reliability and zero-runtime-error deployments.
+
+---
+
+## 🛠️ Technical Stack
+
+**Frontend:**
+- **Framework:** Next.js 14 (App Router, Server Components, Server Actions)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS, Framer Motion (Animations), `dnd-kit` (Drag & Drop)
+- **State Management:** Zustand
+- **Components:** Radix UI (Headless accessibility primitives), Lucide React (Icons)
+
+**Backend:**
+- **Database:** PostgreSQL (hosted on Neon)
+- **ORM:** Prisma
+- **Authentication:** NextAuth.js (v4), `otplib` (for 2FA)
+- **Real-time:** Pusher (WebSockets)
+- **Storage:** UploadThing
+- **Validation:** Zod
+
+---
+
+## ⚙️ Local Development Setup
+
+To run this enterprise application locally:
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/inshrahwaseem/project-management-tool.git
+   cd project-management-tool
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment Variables**
+   Duplicate `.env.example` to `.env` and populate all necessary keys:
+   - Database connection string (Neon/PostgreSQL)
+   - NextAuth Secret
+   - Pusher credentials (App ID, Key, Secret, Cluster)
+   - UploadThing Token
+
+4. **Initialize the Database**
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+
+5. **Start the Development Server**
+   ```bash
+   npm run dev
+   ```
+   *The application will be available at `http://localhost:3000`.*
+
+---
+
+<div align="center">
+  <p>Engineered with precision for production scale.</p>
+</div>
