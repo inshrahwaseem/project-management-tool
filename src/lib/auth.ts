@@ -1,12 +1,12 @@
 /**
  * NextAuth.js Configuration
- * JWT strategy with credentials + Google OAuth providers.
+ * JWT strategy with credentials provider.
  */
 
 import { type NextAuthOptions } from 'next-auth';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import GoogleProvider from 'next-auth/providers/google';
+
 import { compare } from 'bcryptjs';
 import prisma from '@/lib/prisma';
 import logger from '@/lib/logger';
@@ -108,72 +108,9 @@ export const authOptions: NextAuthOptions = {
           orgId,
         };
       },
-    }),
-    ...(process.env.GOOGLE_CLIENT_ID && 
-    process.env.GOOGLE_CLIENT_ID !== "" && 
-    process.env.GOOGLE_CLIENT_SECRET && 
-    process.env.GOOGLE_CLIENT_SECRET !== ""
-      ? [
-          GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          }),
-        ]
-      : []),
   ],
   callbacks: {
-    async signIn({ user, account }) {
-      if (account?.provider === 'google') {
-        try {
-          const existingUser = await prisma.user.findUnique({
-            where: { email: user.email! },
-          });
-
-          if (!existingUser) {
-            // Create user + default org for OAuth sign-in
-            const slug = user.name
-              ? user.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-              : `user-${Date.now()}`;
-
-            const newUser = await prisma.user.create({
-              data: {
-                name: user.name || 'User',
-                email: user.email!,
-                image: user.image,
-                emailVerified: new Date(),
-                role: 'USER',
-              },
-            });
-
-            await prisma.organization.create({
-              data: {
-                name: `${newUser.name}'s Workspace`,
-                slug: `${slug}-${Date.now().toString(36)}`,
-                ownerId: newUser.id,
-              },
-            });
-
-            await prisma.account.create({
-              data: {
-                userId: newUser.id,
-                type: account.type,
-                provider: account.provider,
-                providerAccountId: account.providerAccountId,
-                access_token: account.access_token,
-                refresh_token: account.refresh_token,
-                expires_at: account.expires_at,
-                token_type: account.token_type,
-                scope: account.scope,
-                id_token: account.id_token,
-              },
-            });
-          }
-          return true;
-        } catch (error) {
-          logger.error('OAuth sign-in error', error);
-          return false;
-        }
-      }
+    async signIn() {
       return true;
     },
 

@@ -18,7 +18,7 @@
 
 ## 💼 Platform Overview
 
-ProFlow is a comprehensive, enterprise-grade SaaS application engineered to streamline workflows, enhance team collaboration, and provide deep insights into project health. Built from the ground up with a focus on performance, security, and exceptional user experience, this platform demonstrates modern full-stack web development.
+ProFlow is a comprehensive, enterprise-grade SaaS application engineered to streamline workflows, enhance team collaboration, and provide deep insights into project health. Built from the ground up with a focus on performance, security, and exceptional user experience, this platform demonstrates modern full-stack web development practices.
 
 Moving beyond basic task managers, ProFlow incorporates sophisticated features essential for real-world enterprise environments, including real-time synchronization, advanced role-based access control (RBAC), multi-factor authentication (2FA), automated budget tracking, and AI-driven workflow suggestions.
 
@@ -26,39 +26,34 @@ Moving beyond basic task managers, ProFlow incorporates sophisticated features e
 
 ## 🚀 Getting Started
 
-Follow these steps to run the application locally:
+### Prerequisites
+- Node.js 18+
+- A Neon PostgreSQL database (free tier works)
+- Pusher account (free tier)
+- UploadThing account (free tier)
 
-**Prerequisites:** Node.js 18+ and a PostgreSQL database (Neon recommended).
+### Local Setup
+```bash
+# 1. Clone the repository
+git clone https://github.com/inshrahwaseem/project-management-tool.git
+cd project-management-tool
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/inshrahwaseem/project-management-tool.git
-   cd project-management-tool
-   ```
+# 2. Install dependencies
+npm install
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+# 3. Set up environment variables
+cp .env.example .env
+# Edit .env and fill in your actual values
 
-3. **Configure Environment Variables**
-   ```bash
-   cp .env.example .env
-   ```
-   *Open `.env` and fill in the required values.*
+# 4. Set up the database
+npx prisma migrate dev
+npx prisma generate
 
-4. **Initialize the Database**
-   ```bash
-   npx prisma migrate dev
-   ```
+# 5. Start the development server
+npm run dev
+```
 
-5. **Start the Development Server**
-   ```bash
-   npm run dev
-   ```
-
-6. **Open the Application**
-   Navigate to `http://localhost:3000` in your browser.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
@@ -86,7 +81,7 @@ Follow these steps to run the application locally:
 
 ### 🔐 Security & Authentication
 - **Multi-Factor Authentication (2FA/TOTP):** Robust account security utilizing `otplib` and QR code generation for authenticator app integration.
-- **NextAuth Integration:** Secure, session-based authentication supporting both email/password credentials and OAuth providers.
+- **NextAuth Integration:** Secure, session-based authentication with email/password credentials and JWT strategy.
 - **Role-Based Access Control (RBAC):** Granular permissions defining Owner, Admin, and Member capabilities across project scopes.
 
 ### 📊 Project & Financial Management
@@ -98,7 +93,7 @@ Follow these steps to run the application locally:
 - **Live Sync Engine:** Leveraging Pusher for instant updates across Kanban boards, comments, and notifications without browser refreshes.
 - **Interactive Kanban Boards:** Seamless Drag & Drop (via `dnd-kit`) supporting mouse, touch, and keyboard sensors for flawless mobile and desktop operation.
 - **Workload Analytics:** Capacity planning algorithms that visually flag overloaded team members and distribute tasks efficiently.
-- **AI-Powered Assistance (In Progress):** Integration with OpenAI endpoints to automatically suggest task breakdowns and subtasks based on context. *(Note: Advanced AI features are currently in active development.)*
+- **AI-Powered Assistance (In Progress):** Integration with AI endpoints to suggest task breakdowns — currently in active development.
 
 ### 🎨 Architecture & UI/UX
 - **Optimized Data Layer:** Prisma ORM communicating with a serverless Neon PostgreSQL database, utilizing PostgreSQL Full-Text Search for highly performant global queries.

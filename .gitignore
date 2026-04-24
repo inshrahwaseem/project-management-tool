@@ -50,3 +50,5 @@ folder1/
 CLAUDE.md
 AGENTS.md
 capture.js
+capture-weather.js
+.env
