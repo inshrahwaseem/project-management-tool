@@ -9,6 +9,7 @@ import { TaskService } from '@/lib/services/task.service';
 import { taskFilterSchema, createTaskSchema } from '@/lib/validators/task.schema';
 import { successResponse, apiErrors } from '@/lib/api-response';
 import logger from '@/lib/logger';
+import { pusherServer } from '@/lib/pusher-server';
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -65,6 +66,19 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     const task = await TaskService.createTask(projectId, parsed.data, user.id);
+
+    // Trigger real-time notification if assigned to someone else
+    if (parsed.data.assigneeId && parsed.data.assigneeId !== user.id) {
+      try {
+        await pusherServer.trigger(`user-${parsed.data.assigneeId}`, 'notification', {
+          title: 'New Task Assigned',
+          message: `${user.name || 'Someone'} assigned you to: ${task.title}`,
+          type: 'SUCCESS'
+        });
+      } catch (err) {
+        logger.error('Failed to trigger Pusher event', err);
+      }
+    }
 
     return successResponse({
       data: task,

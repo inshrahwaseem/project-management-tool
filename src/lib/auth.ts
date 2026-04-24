@@ -180,8 +180,21 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.role = (user as unknown as Record<string, unknown>).role;
-        token.orgId = (user as unknown as Record<string, unknown>).orgId;
+        token.role = (user as any).role;
+        
+        let orgId = (user as any).orgId;
+        if (!orgId) {
+          try {
+            const org = await prisma.organization.findFirst({
+              where: { ownerId: user.id },
+              select: { id: true }
+            });
+            orgId = org?.id || null;
+          } catch (error) {
+            logger.error('Failed to fetch orgId in jwt callback', error);
+          }
+        }
+        token.orgId = orgId;
       }
       return token;
     },

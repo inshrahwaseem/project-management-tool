@@ -22,6 +22,10 @@ export async function GET(request: NextRequest) {
       return apiErrors.validationError({ q: ['Search query is required'] });
     }
 
+    // Format query for Postgres Full Text Search (split by spaces and join with & for strict match, or | for any match)
+    // Here we use | so if user types "login button" it finds items with "login" or "button".
+    const searchQuery = query.trim().split(/\s+/).join(' | ');
+
     const results: Array<{
       type: string;
       id: string;
@@ -36,10 +40,7 @@ export async function GET(request: NextRequest) {
         where: {
           orgId: user.orgId || '',
           deletedAt: null,
-          OR: [
-            { title: { contains: query, mode: 'insensitive' } },
-            { description: { contains: query, mode: 'insensitive' } },
-          ],
+          title: { search: searchQuery },
         },
         select: { id: true, title: true, status: true },
         take: limit,
@@ -62,10 +63,7 @@ export async function GET(request: NextRequest) {
         where: {
           deletedAt: null,
           project: { orgId: user.orgId || '', deletedAt: null },
-          OR: [
-            { title: { contains: query, mode: 'insensitive' } },
-            { description: { contains: query, mode: 'insensitive' } },
-          ],
+          title: { search: searchQuery },
         },
         select: {
           id: true,
@@ -92,7 +90,7 @@ export async function GET(request: NextRequest) {
       const comments = await prisma.comment.findMany({
         where: {
           deletedAt: null,
-          content: { contains: query, mode: 'insensitive' },
+          content: { search: searchQuery },
           task: {
             deletedAt: null,
             project: { orgId: user.orgId || '', deletedAt: null },

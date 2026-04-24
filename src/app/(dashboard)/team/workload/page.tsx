@@ -64,13 +64,24 @@ export default function TeamWorkloadPage() {
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-6">
       {/* Header */}
-      <motion.div variants={itemVariants} className="flex items-center gap-4">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl gradient-bg shadow-sm">
-          <Users className="h-5 w-5 text-white" />
+      <motion.div variants={itemVariants} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl gradient-bg shadow-sm">
+            <Users className="h-5 w-5 text-white" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Team Workload</h1>
+            <p className="text-sm text-muted-foreground">Capacity planning across all your projects</p>
+          </div>
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Team Workload</h1>
-          <p className="text-sm text-muted-foreground">Capacity planning across all your projects</p>
+          <a
+            href="/team"
+            className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
+          >
+            <Users className="h-4 w-4 text-muted-foreground" />
+            Team Directory
+          </a>
         </div>
       </motion.div>
 

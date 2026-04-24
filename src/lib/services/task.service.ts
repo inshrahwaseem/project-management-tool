@@ -111,7 +111,17 @@ export class TaskService {
           orderBy: { loggedAt: 'desc' },
         },
         project: {
-          select: { id: true, title: true },
+          select: { 
+            id: true, 
+            title: true,
+            members: {
+              select: {
+                user: {
+                  select: { id: true, name: true, image: true, email: true }
+                }
+              }
+            }
+          },
         },
         _count: {
           select: { comments: true, attachments: true },
@@ -410,6 +420,30 @@ export class TaskService {
    * Soft delete a task.
    */
   static async deleteTask(id: string, userId: string) {
+    const task = await prisma.task.findUnique({
+      where: { id },
+      include: {
+        project: {
+          include: {
+            members: {
+              where: { userId }
+            }
+          }
+        }
+      }
+    });
+
+    if (!task) throw new Error('Task not found');
+
+    const isReporter = task.reporterId === userId;
+    const isProjectOwner = task.project.ownerId === userId;
+    const member = task.project.members[0];
+    const isAdmin = member && (member.role === 'OWNER' || member.role === 'ADMIN');
+
+    if (!isReporter && !isProjectOwner && !isAdmin) {
+      throw new Error('Unauthorized to delete this task');
+    }
+
     const deleted = await prisma.task.update({
       where: { id },
       data: { deletedAt: new Date() },

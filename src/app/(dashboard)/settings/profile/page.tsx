@@ -10,6 +10,7 @@ import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { User, Mail, Shield, Loader2, Save } from 'lucide-react';
 import { getInitials } from '@/lib/utils';
+import { UploadButton } from '@/lib/uploadthing';
 
 export default function ProfilePage() {
   const { data: session, update } = useSession();
@@ -53,7 +54,7 @@ export default function ProfilePage() {
 
       {/* Avatar */}
       <div className="flex items-center gap-4">
-        <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] text-2xl font-bold text-white">
+        <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--secondary))] text-2xl font-bold text-white shrink-0">
           {session?.user?.image ? (
             <img
               src={session.user.image}
@@ -64,13 +65,26 @@ export default function ProfilePage() {
             getInitials(session?.user?.name || 'U')
           )}
         </div>
-        <div>
+        <div className="flex-1">
           <h3 className="font-semibold text-[hsl(var(--foreground))]">
             {session?.user?.name || 'User'}
           </h3>
-          <p className="text-sm text-[hsl(var(--muted-foreground))]">
+          <p className="text-sm text-[hsl(var(--muted-foreground))] mb-2">
             {session?.user?.email}
           </p>
+          <div className="flex items-center gap-2">
+            <UploadButton
+              endpoint="taskAttachment"
+              onClientUploadComplete={(res) => {
+                toast.success('Upload complete! URL: ' + res[0].url);
+                console.log('Files: ', res);
+              }}
+              onUploadError={(error: Error) => {
+                toast.error(`ERROR! ${error.message}`);
+              }}
+              className="ut-button:bg-primary ut-button:text-primary-foreground ut-button:h-8 ut-button:text-xs ut-button:px-4 ut-allowed-content:hidden"
+            />
+          </div>
         </div>
       </div>
 

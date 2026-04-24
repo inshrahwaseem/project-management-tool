@@ -63,6 +63,10 @@ export class ProjectService {
         _count: {
           select: { tasks: true, members: true },
         },
+        tasks: {
+          where: { status: 'DONE', deletedAt: null },
+          select: { id: true },
+        },
       },
     });
 

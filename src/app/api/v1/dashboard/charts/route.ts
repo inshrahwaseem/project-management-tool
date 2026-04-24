@@ -21,25 +21,23 @@ export async function GET() {
 
     const orgFilter = user.orgId ? { orgId: user.orgId, deletedAt: null } : { ownerId: user.id, deletedAt: null };
 
-    // Fetch created tasks per day
-    const createdTasks = await prisma.task.groupBy({
-      by: ['createdAt'],
+    // Fetch tasks created in the last 14 days
+    const createdTasks = await prisma.task.findMany({
       where: {
         project: orgFilter,
         createdAt: { gte: fourteenDaysAgo },
       },
-      _count: true,
+      select: { createdAt: true },
     });
 
-    // Fetch completed tasks per day (based on updatedAt when status is DONE)
-    const completedTasks = await prisma.task.groupBy({
-      by: ['updatedAt'],
+    // Fetch tasks completed in the last 14 days
+    const completedTasks = await prisma.task.findMany({
       where: {
         project: orgFilter,
         status: 'DONE',
         updatedAt: { gte: fourteenDaysAgo },
       },
-      _count: true,
+      select: { updatedAt: true },
     });
 
     // Process data into a daily map for the chart
@@ -53,17 +51,17 @@ export async function GET() {
       dataMap[dateStr] = { date: dateStr, created: 0, completed: 0 };
     }
 
-    createdTasks.forEach((group) => {
-      const dateStr = group.createdAt.toISOString().split('T')[0];
+    createdTasks.forEach((task) => {
+      const dateStr = task.createdAt.toISOString().split('T')[0];
       if (dataMap[dateStr]) {
-        dataMap[dateStr].created += group._count;
+        dataMap[dateStr].created += 1;
       }
     });
 
-    completedTasks.forEach((group) => {
-      const dateStr = group.updatedAt.toISOString().split('T')[0];
+    completedTasks.forEach((task) => {
+      const dateStr = task.updatedAt.toISOString().split('T')[0];
       if (dataMap[dateStr]) {
-        dataMap[dateStr].completed += group._count;
+        dataMap[dateStr].completed += 1;
       }
     });
 

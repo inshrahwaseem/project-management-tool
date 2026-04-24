@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useParams } from 'next/navigation';
-import { LayoutDashboard, ListTodo, CalendarDays, Settings } from 'lucide-react';
+import { LayoutDashboard, ListTodo, CalendarDays, Settings, Users, FolderOpen, Activity } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
@@ -43,6 +43,9 @@ export default function ProjectLayout({ children }: { children: React.ReactNode 
     { name: 'Board', path: `/projects/${projectId}/board`, icon: LayoutDashboard },
     { name: 'List', path: `/projects/${projectId}/list`, icon: ListTodo },
     { name: 'Timeline', path: `/projects/${projectId}/timeline`, icon: CalendarDays },
+    { name: 'Team', path: `/projects/${projectId}/team`, icon: Users },
+    { name: 'Files', path: `/projects/${projectId}/files`, icon: FolderOpen },
+    { name: 'Activity', path: `/projects/${projectId}/activity`, icon: Activity },
     { name: 'Automations', path: `/projects/${projectId}/automations`, icon: Settings, adminOnly: true },
     { name: 'Settings', path: `/projects/${projectId}/settings`, icon: Settings, adminOnly: true },
   ];

@@ -5,6 +5,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import '@/styles/globals.css';
+import "@uploadthing/react/styles.css";
 import { Providers } from './providers';
 
 const inter = Inter({

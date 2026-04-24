@@ -248,7 +248,7 @@ export default function ProjectsPage() {
           {filteredProjects.map((project) => {
             const taskCount = project._count?.tasks || 0;
             const memberCount = project._count?.members || 0;
-            const doneCount = 0; // Will be computed from real data
+            const doneCount = project.tasks?.length || 0;
             const completion = calcCompletionPercent(doneCount, taskCount);
 
             return (

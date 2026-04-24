@@ -271,6 +271,71 @@ export function TaskDetail() {
                     />
                   </div>
 
+                    {/* Subtasks */}
+                    <div className="pt-2">
+                      <div className="flex items-center justify-between mb-2">
+                        <label className="block text-xs font-medium text-[hsl(var(--muted-foreground))]">
+                          Subtasks
+                        </label>
+                      </div>
+                      <div className="space-y-2">
+                        {((task as any).customFields?.subtasks || []).map((subtask: any, index: number) => (
+                          <div key={index} className="flex items-center gap-2 group">
+                            <button
+                              onClick={() => {
+                                const newSubtasks = [...((task as any).customFields?.subtasks || [])];
+                                newSubtasks[index].completed = !newSubtasks[index].completed;
+                                handleUpdate('customFields', { ...(task as any).customFields, subtasks: newSubtasks });
+                              }}
+                              className={cn(
+                                "flex h-4 w-4 shrink-0 items-center justify-center rounded border transition-colors",
+                                subtask.completed ? "bg-primary border-primary text-white" : "border-muted-foreground/30 bg-transparent"
+                              )}
+                            >
+                              {subtask.completed && <svg viewBox="0 0 14 14" fill="none" className="h-3 w-3"><path d="M3 8L6 11L11 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                            </button>
+                            <input
+                              type="text"
+                              value={subtask.title}
+                              onChange={(e) => {
+                                const newSubtasks = [...((task as any).customFields?.subtasks || [])];
+                                newSubtasks[index].title = e.target.value;
+                                setTask({ ...task, customFields: { ...(task as any).customFields, subtasks: newSubtasks } } as any);
+                              }}
+                              onBlur={(e) => {
+                                const newSubtasks = [...((task as any).customFields?.subtasks || [])];
+                                newSubtasks[index].title = e.target.value;
+                                handleUpdate('customFields', { ...(task as any).customFields, subtasks: newSubtasks });
+                              }}
+                              className={cn(
+                                "flex-1 bg-transparent text-sm outline-none transition-all focus:border-b focus:border-primary",
+                                subtask.completed && "text-muted-foreground line-through"
+                              )}
+                            />
+                            <button
+                              onClick={() => {
+                                const newSubtasks = ((task as any).customFields?.subtasks || []).filter((_: any, i: number) => i !== index);
+                                handleUpdate('customFields', { ...(task as any).customFields, subtasks: newSubtasks });
+                              }}
+                              className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-opacity"
+                            >
+                              <X className="h-4 w-4" />
+                            </button>
+                          </div>
+                        ))}
+                        <button
+                          onClick={() => {
+                            const newSubtasks = [...((task as any).customFields?.subtasks || []), { title: '', completed: false }];
+                            handleUpdate('customFields', { ...(task as any).customFields, subtasks: newSubtasks });
+                          }}
+                          className="flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-primary transition-colors"
+                        >
+                          <Plus className="h-3 w-3" />
+                          Add subtask
+                        </button>
+                      </div>
+                    </div>
+
                   {/* Attachments Section */}
                   <div className="space-y-4">
                     <AttachmentList 
@@ -338,21 +403,19 @@ export function TaskDetail() {
                     <div className="flex items-center gap-3">
                       <User className="h-4 w-4 text-[hsl(var(--muted-foreground))]" />
                       <span className="text-xs text-[hsl(var(--muted-foreground))] w-20">Assignee</span>
-                      <div className="flex items-center gap-2">
-                        {task.assignee ? (
-                          <>
-                            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[hsl(var(--primary))] text-[10px] font-bold text-white">
-                              {getInitials(task.assignee.name)}
-                            </div>
-                            <span className="text-sm text-[hsl(var(--foreground))]">
-                              {task.assignee.name}
-                            </span>
-                          </>
-                        ) : (
-                          <span className="text-sm text-[hsl(var(--muted-foreground))]">
-                            Unassigned
-                          </span>
-                        )}
+                      <div className="flex flex-1 items-center gap-2">
+                        <select
+                          value={task.assigneeId || ''}
+                          onChange={(e) => handleUpdate('assigneeId', e.target.value || null)}
+                          className="w-full rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/20"
+                        >
+                          <option value="">Unassigned</option>
+                          {(task.project as any)?.members?.map((m: any) => (
+                            <option key={m.user.id} value={m.user.id}>
+                              {m.user.name}
+                            </option>
+                          ))}
+                        </select>
                       </div>
                     </div>
 

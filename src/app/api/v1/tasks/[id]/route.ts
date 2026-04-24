@@ -72,7 +72,10 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     await TaskService.deleteTask(id, user.id);
 
     return successResponse({ message: 'Task deleted successfully' });
-  } catch (error) {
+  } catch (error: any) {
+    if (error.message === 'Unauthorized to delete this task') {
+      return apiErrors.forbidden('You do not have permission to delete this task.');
+    }
     logger.error('DELETE /api/v1/tasks/:id failed', error);
     return apiErrors.internal();
   }

@@ -10,6 +10,7 @@ import { Topbar } from '@/components/layout/Topbar';
 import { MobileNav } from '@/components/layout/MobileNav';
 import { GlobalSearch } from '@/components/search/GlobalSearch';
 import { TaskDetail } from '@/components/tasks/TaskDetail';
+import { PusherListener } from '@/components/providers/PusherListener';
 
 export default function DashboardLayout({
   children,
@@ -55,6 +56,9 @@ export default function DashboardLayout({
 
       {/* Task detail slide-over */}
       <TaskDetail />
+
+      {/* Real-time notification listener */}
+      <PusherListener />
     </div>
   );
 }

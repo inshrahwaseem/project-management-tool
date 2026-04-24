@@ -30,20 +30,30 @@ export async function GET() {
     const user = await getCurrentUser();
     if (!user) return apiErrors.unauthorized();
 
-    // Get the last 15 activity logs for this user's organization
+    // Get project IDs for the user to show related activity
+    const userProjectMemberships = await prisma.projectMember.findMany({
+      where: { userId: user.id },
+      select: { projectId: true }
+    });
+    const projectIds = userProjectMemberships.map(m => m.projectId);
+
+    // Get task IDs for those projects
+    const projectTaskIds = (await prisma.task.findMany({
+      where: { projectId: { in: projectIds } },
+      select: { id: true }
+    })).map(t => t.id);
+
+    // Get the last 15 activity logs for this user's context
     const logs = await prisma.activityLog.findMany({
       take: 15,
       orderBy: { createdAt: 'desc' },
-      where: user.orgId
-        ? {
-            // Show activities from users in the same org
-            user: {
-              ownedOrganizations: {
-                some: { id: user.orgId },
-              },
-            },
-          }
-        : { userId: user.id },
+      where: {
+        OR: [
+          { userId: user.id },
+          { entityType: 'project', entityId: { in: projectIds } },
+          { entityType: 'task', entityId: { in: projectTaskIds } }
+        ]
+      },
       include: {
         user: {
           select: {

@@ -167,6 +167,30 @@ export default function TasksPage() {
                 </div>
               </div>
               <div className="flex items-center gap-3">
+                <select
+                  value={task.status}
+                  onChange={async (e) => {
+                    e.stopPropagation();
+                    const newStatus = e.target.value;
+                    try {
+                      await fetch(`/api/v1/tasks/${task.id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ status: newStatus }),
+                      });
+                      fetchTasks();
+                    } catch {
+                      toast.error('Failed to update status');
+                    }
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="rounded-md border border-border bg-card px-2 py-1 text-xs outline-none focus:border-primary transition-colors"
+                  style={{ color: TASK_STATUS_COLORS[task.status] }}
+                >
+                  {Object.entries(TASK_STATUS_LABELS).map(([key, label]) => (
+                    <option key={key} value={key} style={{ color: 'initial' }}>{label}</option>
+                  ))}
+                </select>
                 <span
                   className="rounded-md px-2 py-0.5 text-xs font-medium"
                   style={{

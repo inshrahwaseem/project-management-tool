@@ -2,7 +2,8 @@
 // All tables use UUID primary keys, snake_case mapping, soft deletes, and proper indexes.
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres"]
 }
 
 datasource db {

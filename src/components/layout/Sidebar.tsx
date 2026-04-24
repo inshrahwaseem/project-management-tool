@@ -17,7 +17,6 @@ import {
   Bell,
   Settings,
   ChevronLeft,
-  ChevronRight,
   LogOut,
   Palette,
   Zap,
@@ -47,7 +46,7 @@ const navItems = [
   },
   {
     label: 'Team',
-    href: '/team/workload',
+    href: '/team',
     icon: Users,
   },
   {
@@ -101,8 +100,20 @@ export function Sidebar() {
         isCompact ? 'w-[72px]' : 'w-[var(--sidebar-width)]'
       )}
     >
+      {/* Desktop Toggle Button */}
+      <button
+        onClick={() => setCollapsed(!collapsed)}
+        className={cn(
+          'absolute -right-3 top-20 hidden lg:flex h-6 w-6 items-center justify-center rounded-full border border-sidebar-border bg-sidebar-bg text-muted-foreground shadow-sm transition-all hover:bg-sidebar-hover hover:text-foreground',
+          collapsed && 'rotate-180'
+        )}
+        aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+      >
+        <ChevronLeft className="h-3 w-3" />
+      </button>
+
       {/* Logo */}
-      <div className="flex h-16 items-center justify-between border-b border-sidebar-border px-4">
+      <div className="flex h-16 items-center border-b border-sidebar-border px-4">
         {!isCompact && (
           <Link href="/dashboard" className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-bg">
@@ -116,21 +127,6 @@ export function Sidebar() {
             <Zap className="h-4 w-4 text-white" />
           </Link>
         )}
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className={cn(
-            'rounded-md p-1 transition-colors hover:bg-sidebar-hover',
-            'text-muted-foreground',
-            isCompact && 'mx-auto mt-2'
-          )}
-          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-          {collapsed ? (
-            <ChevronRight className="h-4 w-4" />
-          ) : (
-            <ChevronLeft className="h-4 w-4" />
-          )}
-        </button>
       </div>
 
       {/* Navigation */}
