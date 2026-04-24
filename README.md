@@ -28,16 +28,16 @@ Moving beyond basic task managers, ProFlow incorporates sophisticated features e
 
 <div align="center">
 
-![Dashboard Overview](./public/screenshots/dashboard.svg)
+![Dashboard Overview](./public/screenshots/dashboard.png)
 *Executive Dashboard: High-level overview of team workload, recent activity, and active project health metrics.*
 
-![Kanban Interface](./public/screenshots/kanban.svg)
+![Kanban Interface](./public/screenshots/kanban.png)
 *Interactive Kanban: Drag-and-drop workflow management with real-time synchronization.*
 
-![Milestone Tracking](./public/screenshots/milestones.svg)
+![Milestone Tracking](./public/screenshots/milestones.png)
 *Milestone Timeline: Track critical project phases, deadlines, and overall progress completion.*
 
-![Budget & Expenses](./public/screenshots/budget.svg)
+![Budget & Expenses](./public/screenshots/budget.png)
 *Financial Analytics: Categorized budget tracking and expense management for project lifecycle cost analysis.*
 
 </div>
