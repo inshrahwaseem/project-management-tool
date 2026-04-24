@@ -108,6 +108,7 @@ export const authOptions: NextAuthOptions = {
           orgId,
         };
       },
+    }),
   ],
   callbacks: {
     async signIn() {
