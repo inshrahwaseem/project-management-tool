@@ -45,3 +45,8 @@ next-env.d.ts
 folder1/
 
 .vercel
+
+# AI Assistant files
+CLAUDE.md
+AGENTS.md
+capture.js

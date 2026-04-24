@@ -2,7 +2,7 @@
   
   # 🚀 ProFlow: Enterprise SaaS Project Management Platform
 
-  **A production-ready, AI-enhanced task and project management ecosystem designed for modern enterprise teams.**
+  **Built with production-grade patterns, this AI-enhanced task and project management ecosystem is designed for modern enterprise teams.**
 
   [![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_Platform-6366f1?style=for-the-badge&logo=vercel)](https://proflow-project-ui.vercel.app)
   
@@ -18,9 +18,47 @@
 
 ## 💼 Platform Overview
 
-ProFlow is a comprehensive, enterprise-grade SaaS application engineered to streamline workflows, enhance team collaboration, and provide deep insights into project health. Built from the ground up with a focus on performance, security, and exceptional user experience, this platform demonstrates mastery of modern full-stack web development.
+ProFlow is a comprehensive, enterprise-grade SaaS application engineered to streamline workflows, enhance team collaboration, and provide deep insights into project health. Built from the ground up with a focus on performance, security, and exceptional user experience, this platform demonstrates modern full-stack web development.
 
 Moving beyond basic task managers, ProFlow incorporates sophisticated features essential for real-world enterprise environments, including real-time synchronization, advanced role-based access control (RBAC), multi-factor authentication (2FA), automated budget tracking, and AI-driven workflow suggestions.
+
+---
+
+## 🚀 Getting Started
+
+Follow these steps to run the application locally:
+
+**Prerequisites:** Node.js 18+ and a PostgreSQL database (Neon recommended).
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/inshrahwaseem/project-management-tool.git
+   cd project-management-tool
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure Environment Variables**
+   ```bash
+   cp .env.example .env
+   ```
+   *Open `.env` and fill in the required values.*
+
+4. **Initialize the Database**
+   ```bash
+   npx prisma migrate dev
+   ```
+
+5. **Start the Development Server**
+   ```bash
+   npm run dev
+   ```
+
+6. **Open the Application**
+   Navigate to `http://localhost:3000` in your browser.
 
 ---
 
@@ -60,7 +98,7 @@ Moving beyond basic task managers, ProFlow incorporates sophisticated features e
 - **Live Sync Engine:** Leveraging Pusher for instant updates across Kanban boards, comments, and notifications without browser refreshes.
 - **Interactive Kanban Boards:** Seamless Drag & Drop (via `dnd-kit`) supporting mouse, touch, and keyboard sensors for flawless mobile and desktop operation.
 - **Workload Analytics:** Capacity planning algorithms that visually flag overloaded team members and distribute tasks efficiently.
-- **AI-Powered Assistance:** Integration with AI endpoints to automatically suggest task breakdowns and subtasks based on context.
+- **AI-Powered Assistance (In Progress):** Integration with OpenAI endpoints to automatically suggest task breakdowns and subtasks based on context. *(Note: Advanced AI features are currently in active development.)*
 
 ### 🎨 Architecture & UI/UX
 - **Optimized Data Layer:** Prisma ORM communicating with a serverless Neon PostgreSQL database, utilizing PostgreSQL Full-Text Search for highly performant global queries.
@@ -82,6 +120,7 @@ Moving beyond basic task managers, ProFlow incorporates sophisticated features e
 - **Database:** PostgreSQL (hosted on Neon)
 - **ORM:** Prisma
 - **Authentication:** NextAuth.js (v4), `otplib` (for 2FA)
+- **AI Provider:** OpenAI (In Progress)
 - **Real-time:** Pusher (WebSockets)
 - **Storage:** UploadThing
 - **Deployment:** Vercel
