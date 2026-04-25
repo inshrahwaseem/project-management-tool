@@ -61,17 +61,11 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 <div align="center">
 
-![Dashboard Overview](./public/screenshots/dashboard.png)
-*Executive Dashboard: High-level overview of team workload, recent activity, and active project health metrics.*
+![ProFlow Authentication](./public/screenshot-1.png)
+*Enterprise-Grade Security: Beautiful, responsive authentication flows featuring smooth animations and strict validation without third-party dependencies.*
 
-![Kanban Interface](./public/screenshots/kanban.png)
-*Interactive Kanban: Drag-and-drop workflow management with real-time synchronization.*
-
-![Milestone Tracking](./public/screenshots/milestones.png)
-*Milestone Timeline: Track critical project phases, deadlines, and overall progress completion.*
-
-![Budget & Expenses](./public/screenshots/budget.png)
-*Financial Analytics: Categorized budget tracking and expense management for project lifecycle cost analysis.*
+![Dashboard & Onboarding](./public/screenshot-2.png)
+*Seamless Workspace: Intuitive and modern UI design crafted for maximum team productivity and real-time collaboration.*
 
 </div>
 
