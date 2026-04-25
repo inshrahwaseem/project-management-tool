@@ -4,7 +4,7 @@
 
   **Built with production-grade patterns, this AI-enhanced task and project management ecosystem is designed for modern enterprise teams.**
 
-  [![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_Platform-6366f1?style=for-the-badge&logo=vercel)](https://proflow-project-ui.vercel.app)
+  [![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_Platform-6366f1?style=for-the-badge&logo=vercel)](https://project-management-tool-sooty-three.vercel.app)
   
   [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
