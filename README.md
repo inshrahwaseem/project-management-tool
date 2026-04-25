@@ -53,7 +53,7 @@ npx prisma generate
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open the [Live Dashboard](https://project-management-tool-sooty-three.vercel.app) to see the application in action.
 
 ---
 
@@ -61,11 +61,14 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 <div align="center">
 
-![ProFlow Authentication](./public/screenshot-1.png)
-*Enterprise-Grade Security: Beautiful, responsive authentication flows featuring smooth animations and strict validation without third-party dependencies.*
+![ProFlow Sign Up](./public/screenshot-1.png)
+*Modern Onboarding: Beautifully designed, responsive registration flow with real-time password strength validation and enterprise-ready security.*
 
-![Dashboard & Onboarding](./public/screenshot-2.png)
-*Seamless Workspace: Intuitive and modern UI design crafted for maximum team productivity and real-time collaboration.*
+![Project Management List View](./public/screenshot-2.png)
+*Comprehensive Task Tracking: High-performance list views for tracking project tasks, statuses, and assignees with real-time synchronization.*
+
+![Customizable Appearance](./public/screenshot-3.png)
+*Tailored Experience: Sophisticated theme engine supporting multiple dark modes, light modes, and high-contrast accessible variants.*
 
 </div>
 
